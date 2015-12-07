@@ -1,0 +1,6 @@
+name: Decoupled Users Authentication
+description: Decouples user accounts and authentication.
+package: Custom
+type: module
+version: 1.0
+core: 8.x
