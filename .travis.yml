@@ -137,7 +137,7 @@ before_script:
 script:
   - pwd
   - ls
-  #- drupal-ti --include "./travis-ci/travis-script.sh"
+  - drupal-ti --include "./travis-ci/travis-script.sh"
   - drupal-ti script
   - pwd
   - ls
