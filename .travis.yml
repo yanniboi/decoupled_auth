@@ -76,15 +76,16 @@ env:
     #- DRUPAL_TI_COVERAGE_FILE="build/logs/clover.xml"
 
     # Debug options
-    #- DRUPAL_TI_DEBUG="-x -v"
+    - DRUPAL_TI_DEBUG="-x -v"
     # Set to "all" to output all files, set to e.g. "xvfb selenium" or "selenium",
     # etc. to only output those channels.
     #- DRUPAL_TI_DEBUG_FILE_OUTPUT="selenium xvfb webserver"
+    - DRUPAL_TI_DEBUG_FILE_OUTPUT="all"
 
   matrix:
     #- DRUPAL_TI_RUNNERS="phpunit simpletest behat"
-    - DRUPAL_TI_RUNNERS="phpunit simpletest"
-    #- DRUPAL_TI_RUNNERS="phpunit"
+    #- We run phpunit manually in ./travis-ci/travis-script.sh
+    - DRUPAL_TI_RUNNERS="simpletest"
 
 
 mysql:
@@ -93,63 +94,25 @@ mysql:
   encoding: utf8
 
 before_install:
-  - pwd
-  - ls
-  # possibly optional
-  #- sudo apt-get update > /dev/null
   - composer self-update
   #- git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
   - composer global require "lionsad/drupal_ti:1.*"
   - drupal-ti before_install
-  - pwd
-  - ls
 
 install:
-  - pwd
-  - ls
   - drupal-ti install
-  - pwd
-  - ls
-  # Download Drupal
-  #- cd ..
-  #- drush dl drupal-8 --drupal-project-rename=drupal
-  #- mv decoupled_auth drupal/modules
-  #- cd drupal
-
-  # Install drupal default profile
-  #- drush --verbose site-install --db-url=mysql://root:@127.0.0.1/drupal --yes
-  #- drush en -y decoupled_auth
-
-  # Import config for our pseudo install
-  #- drush --verbose config-import active --yes
-
-  # Move into core directory for phpunits benefit
-  #- cd core
 
 before_script:
-  - pwd
-  - ls
   - drupal-ti --include "./travis-ci/travis-before-script.sh"
   - drupal-ti before_script
-  - pwd
-  - ls
 
 script:
-  - pwd
-  - ls
-  - drupal-ti --include "./travis-ci/travis-script.sh"
-  - drupal-ti script
-  - pwd
-  - ls
-  #script: phpunit --group decoupled_auth
-
+  #- drupal-ti --include "./travis-ci/travis-script.sh"
+  #- drupal-ti script
+  script: phpunit --group decoupled_auth
 
 after_script:
-  - pwd
-  - ls
   - drupal-ti after_script
-  - pwd
-  - ls
 
 notifications:
   #email: yan@yanniboi.com
