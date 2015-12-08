@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the decoupled user authentication
+ * module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function decoupled_auth_install() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+
+  // Get hold of our user type definition.
+  $user_type = $manager->getEntityType('user');
+
+  // Switch to our own class and inform the entity definition manager.
+  $user_type->setClass('Drupal\decoupled_auth\User');
+  $user_type->setHandlerClass('storage_schema', 'Drupal\decoupled_auth\UserStorageSchema');
+  $manager->updateEntityType($user_type);
+
+  // Perform our change to our fields.
+  $name = $manager->getFieldStorageDefinition('name', 'user');
+  $name->setRequired(FALSE);
+  $manager->updateFieldStorageDefinition($name);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function decoupled_auth_uninstall() {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+
+  // Get hold of our user type definition.
+  $user_type = $manager->getEntityType('user');
+
+  // Switch to our own class and inform the entity definition manager.
+  $user_type->setClass('Drupal\user\Entity\User');
+  $user_type->setHandlerClass('storage_schema', 'Drupal\user\UserStorageSchema');
+  $manager->updateEntityType($user_type);
+
+  // Perform our change to our fields.
+  $name = $manager->getFieldStorageDefinition('name', 'user');
+  $name->setRequired(TRUE);
+  $manager->updateFieldStorageDefinition($name);
+}
