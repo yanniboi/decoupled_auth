@@ -83,8 +83,8 @@ env:
 
   matrix:
     #- DRUPAL_TI_RUNNERS="phpunit simpletest behat"
-    #- DRUPAL_TI_RUNNERS="phpunit simpletest"
-    - DRUPAL_TI_RUNNERS="phpunit"
+    - DRUPAL_TI_RUNNERS="phpunit simpletest"
+    #- DRUPAL_TI_RUNNERS="phpunit"
 
 
 mysql:
