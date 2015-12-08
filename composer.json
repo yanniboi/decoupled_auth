@@ -1,0 +1,6 @@
+{
+  "name": "drupal/decoupled_auth",
+  "description": "Allow decoupling of Drupal Authentication from Drupal Users.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+"
+}

@@ -1,5 +1,9 @@
 name: Decoupled User Authentication
-description: Decouples user accounts and authentication.
-package: Custom
+description: "Allow decoupling of Drupal Authentication from Drupal Users."
+package: Tool
+
 type: module
 core: 8.x
+
+dependencies:
+  - user
