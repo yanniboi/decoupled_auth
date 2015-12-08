@@ -44,6 +44,10 @@ install:
   # Move into core directory for phpunits benefit
   - cd core
 
+# only test our module tests
+# to test all drupal tests uncomment below.
+script: phpunit --group decoupled_auth
+
 notifications:
 
   irc: "chat.freenode.net#freelygive"
