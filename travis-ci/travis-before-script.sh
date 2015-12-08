@@ -17,8 +17,10 @@ drupal_ti_ensure_drupal
 # Ensure the module is linked into the codebase.
 drupal_ti_ensure_module_linked
 
-pwd
-ls
+# Require that minimal profile enables decoupled_auth.
+ls $DRUPAL_TI_DRUPAL_DIR
+ls $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth
+cp $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/minimal.info.yml $DRUPAL_TI_DRUPAL_DIR/core/profiles/minimal
 
 # Enable main module and submodules.
 drush en -y decoupled_auth
