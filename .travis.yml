@@ -107,9 +107,8 @@ before_script:
   - drupal-ti before_script
 
 script:
-  #- drupal-ti --include "./travis-ci/travis-script.sh"
-  #- drupal-ti script
-  script: phpunit --group decoupled_auth
+  - drupal-ti --include "./travis-ci/travis-script.sh"
+  - drupal-ti script
 
 after_script:
   - drupal-ti after_script
