@@ -96,7 +96,7 @@ before_install:
   - pwd
   - ls
   # possibly optional
-  - sudo apt-get update > /dev/null
+  #- sudo apt-get update > /dev/null
   - composer self-update
   #- git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
   - composer global require "lionsad/drupal_ti:1.*"
