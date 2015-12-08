@@ -4,7 +4,7 @@
 language: php
 
 php:
-  - 5.4
+  - 5.6
 
 mysql:
   database: drupal
@@ -12,7 +12,7 @@ mysql:
   encoding: utf8
 
 before_install:
-# possibly optional
+  # possibly optional
   - sudo apt-get update > /dev/null
   - composer self-update
 
@@ -30,7 +30,6 @@ install:
 
   # Download Drupal
   - drush dl drupal-8 --destination=drupal -y
-  - mv drupal
 
   # Install drupal default profile
   - drush --verbose site-install --db-url=mysql://root:@127.0.0.1/drupal --yes
