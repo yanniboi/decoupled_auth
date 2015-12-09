@@ -96,7 +96,7 @@ mysql:
 before_install:
   - composer self-update
   #- git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
-  - composer global require "yanniboi/drupal_ti:1.*"
+  - composer global require "yanniboi/drupal_ti:dev-master"
   - drupal-ti before_install
 
 install:
