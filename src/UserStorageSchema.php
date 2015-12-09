@@ -2,15 +2,16 @@
 
 /**
  * @file
- * Contains \Drupal\decoupled_auth\User.
+ * Contains \Drupal\decoupled_auth\UserStorageSchema.
  */
 
 namespace Drupal\decoupled_auth;
 
 use Drupal\user\UserStorageSchema as CoreUserStorageSchema;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
- * Defines the decoupled user authentication user entity class.
+ * Defines the decoupled user schema handler.
  */
 class UserStorageSchema extends CoreUserStorageSchema {
 
