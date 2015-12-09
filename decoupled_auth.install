@@ -10,7 +10,7 @@
  * Implements hook_install().
  */
 function decoupled_auth_install() {
-  $manager = \Drupal::entityDefinitionUpdateManager();
+  $manager = Drupal::entityDefinitionUpdateManager();
 
   // Get hold of our user type definition.
   $user_type = $manager->getEntityType('user');
@@ -38,7 +38,7 @@ function decoupled_auth_install() {
  * Implements hook_uninstall().
  */
 function decoupled_auth_uninstall() {
-  $manager = \Drupal::entityDefinitionUpdateManager();
+  $manager = Drupal::entityDefinitionUpdateManager();
 
   // Get hold of our user type definition.
   $user_type = $manager->getEntityType('user');
