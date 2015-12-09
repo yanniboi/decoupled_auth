@@ -8,6 +8,7 @@
 namespace Drupal\decoupled_auth;
 
 use Drupal\user\UserStorageSchema as CoreUserStorageSchema;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Defines the decoupled user authentication user entity class.
