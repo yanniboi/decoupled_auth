@@ -2,5 +2,15 @@
   "name": "drupal/decoupled_auth",
   "description": "Allow decoupling of Drupal Authentication from Drupal Users.",
   "type": "drupal-module",
-  "license": "GPL-2.0+"
+  "license": "GPL-2.0+",
+  "autoload": {
+    "psr-4": {
+      "Drupal\\decoupled_auth\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Drupal\\Tests\\decoupled_auth\\": "tests/src"
+    }
+  }
 }
