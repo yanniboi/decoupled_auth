@@ -22,9 +22,14 @@ class User extends CoreUser {
     $fields = parent::baseFieldDefinitions($entity_type);
 
     // Make name not required at a database level and swap the constraint.
+    $constraints = $fields['name']->getConstraints();
+    unset($constraints['UserName']);
+    unset($constraints['NotNull']);
+    $constraints['DecoupledAuthUserName'] = array();
+
     $fields['name']
       ->setRequired(FALSE)
-      ->addConstraint('DecoupledAuthUserNameRequired');
+      ->setConstraints($constraints);
 
     // Swap to our own required constraint for mail.
     // @todo: Do this.

@@ -22,7 +22,15 @@ function decoupled_auth_install() {
 
   // Perform our change to our fields.
   $name = $manager->getFieldStorageDefinition('name', 'user');
-  $name->setRequired(FALSE);
+  $constraints = $name->getConstraints();
+  unset($constraints['UserName']);
+  unset($constraints['NotNull']);
+  $constraints['DecoupledAuthUserName'] = array();
+
+  $name
+    ->setRequired(FALSE)
+    ->setConstraints($constraints);
+
   $manager->updateFieldStorageDefinition($name);
 }
 
@@ -42,6 +50,14 @@ function decoupled_auth_uninstall() {
 
   // Perform our change to our fields.
   $name = $manager->getFieldStorageDefinition('name', 'user');
-  $name->setRequired(TRUE);
+  $constraints = $name->getConstraints();
+  unset($constraints['DecoupledAuthUserName']);
+  $constraints['UserName'] = array();
+  $constraints['NotNull'] = array();
+
+  $name
+    ->setRequired(FALSE)
+    ->setConstraints($constraints);
+
   $manager->updateFieldStorageDefinition($name);
 }
