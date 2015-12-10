@@ -16,8 +16,8 @@ function decoupled_auth_install() {
   $user_type = $manager->getEntityType('user');
 
   // Switch to our own class and inform the entity definition manager.
-  $user_type->setClass('Drupal\decoupled_auth\Entity\User');
-  $user_type->setHandlerClass('storage_schema', 'Drupal\decoupled_auth\UserStorageSchema');
+  $user_type->setClass('Drupal\decoupled_auth\Entity\DecoupledAuthUser');
+  $user_type->setHandlerClass('storage_schema', 'Drupal\decoupled_auth\DecoupledAuthUserStorageSchema');
   $manager->updateEntityType($user_type);
 
   // Perform our change to our fields.
