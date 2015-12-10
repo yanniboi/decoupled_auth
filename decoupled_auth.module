@@ -36,11 +36,11 @@ function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_st
   $form['account']['mail']['#weight'] = -2;
 
   // Add our 'has login details' checkbox.
-  $form['account']['decoupled_auth'] = [
+  $form['account']['not_decoupled'] = [
     '#type' => 'checkbox',
     '#title' => t('This user has login details'),
     '#description' => t('If un-checked, this user will not have a username and password.'),
-    '#default_value' => $account->isNew() || $account->getAccountName(),
+    '#default_value' => !$account->isDecoupled(),
     '#weight' => -1,
   ];
 
@@ -50,39 +50,27 @@ function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_st
     if (isset($form['account'][$element])) {
       if (!empty($form['account'][$element]['#required'])) {
         $form['account'][$element]['#required'] = FALSE;
-        $form['account'][$element]['#original_required'] = TRUE;
-        $form['account'][$element]['#states']['required'][':input[name="decoupled_auth"]'] = ['checked' => TRUE];
+        $form['account'][$element]['#states']['required'][':input[name="not_decoupled"]'] = ['checked' => TRUE];
       }
 
       // If not mail, hide unless this user has login details.
       if ($element != 'mail') {
-        $form['account'][$element]['#states']['visible'][':input[name="decoupled_auth"]'] = ['checked' => TRUE];
+        $form['account'][$element]['#states']['visible'][':input[name="not_decoupled"]'] = ['checked' => TRUE];
       }
-
-      // Add an element validate to deal with the required state.
-      $form['account'][$element]['#element_validate'][] = 'decoupled_auth_form_user_form_element_validate';
     }
   }
+
+  $form['#entity_builders'][] = 'decoupled_auth_form_user_form_entity_build';
 }
 
 /**
- * Element validation handler for mail/name/pass on user_form.
+ * Entity build handler for user_form.
  *
  * @see decoupled_auth_form_user_form_alter()
  */
-function decoupled_auth_form_user_form_element_validate($element, FormStateInterface $form_state, array $form) {
+function decoupled_auth_form_user_form_entity_build($entity_type, $entity, &$form, &$form_state) {
   // If we are not decoupling, process when things are required.
-  if ($form_state->getValue('decoupled_auth')) {
-    if (!empty($element['#original_required'])) {
-      if (empty($element['#value'])) {
-        $form_state->setError($element, $this->t('@name field is required.', array('@name' => $element['#title'])));
-      }
-    }
-  }
-  // Otherwise clear our the name/pass values.
-  elseif (in_array($element['#name'], array('name', 'pass'))) {
-    $form_state->setValue($element['#parents'], NULL);
-  }
+  $entity->setDecoupled(!$form_state->getValue('not_decoupled'));
 }
 
 /**

@@ -20,7 +20,8 @@ class DecoupledAuthUserNameConstraintValidator extends UserNameConstraintValidat
    * {@inheritdoc}
    */
   public function validate($items, Constraint $constraint) {
-    if (!isset($items) || !$items->value) {
+    $is_decoupled = $items instanceof FieldItemListInterface && $items->getEntity()->isDecoupled();
+    if ($is_decoupled && (!isset($items) || !$items->value)) {
       return;
     }
     parent::validate($items, $constraint);
