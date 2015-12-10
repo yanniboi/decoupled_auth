@@ -20,10 +20,20 @@ class DecoupledAuthUserNameConstraintValidator extends UserNameConstraintValidat
    * {@inheritdoc}
    */
   public function validate($items, Constraint $constraint) {
-    $is_decoupled = $items instanceof FieldItemListInterface && $items->getEntity()->isDecoupled();
-    if ($is_decoupled && (!isset($items) || !$items->value)) {
-      return;
+    /** @var \Drupal\Core\Field\FieldItemListInterface $items */
+    /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $account */
+    // If this account is decoupled,
+    $account = $items->getEntity();
+
+    // If we are decoupled, we must not have a name.
+    if ($account->isDecoupled()) {
+      if (isset($items) && $items->value) {
+        $this->context->addViolation($constraint->decoupledNotEmptyMessage);
+      }
     }
-    parent::validate($items, $constraint);
+    // Otherwise, pass onto the parent to validate as a normal user.
+    else {
+      parent::validate($items, $constraint);
+    }
   }
 }
