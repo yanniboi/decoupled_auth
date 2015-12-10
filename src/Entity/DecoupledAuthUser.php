@@ -46,8 +46,10 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
    */
   public function setDecoupled($decoupled = NULL) {
     $this->decoupled = $decoupled ?: $this->name->value === NULL;
-    $this->name = NULL;
-    $this->pass = NULL;
+    if ($this->decoupled) {
+      $this->name = NULL;
+      $this->pass = NULL;
+    }
   }
 
   /**
