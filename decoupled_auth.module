@@ -29,7 +29,7 @@ function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_st
     return;
   }
 
-  /** @var \Drupal\user\UserInterface $account */
+  /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $account */
   $account = $form_state->getFormObject()->getEntity();
 
   // Set a weight on mail so we can insert our checkbox in the right place.
@@ -70,6 +70,7 @@ function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_st
  */
 function decoupled_auth_form_user_form_entity_build($entity_type, $entity, &$form, &$form_state) {
   // If we are not decoupling, process when things are required.
+  /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $entity */
   $entity->setDecoupled(!$form_state->getValue('not_decoupled'));
 }
 
