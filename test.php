@@ -1,3 +1,1 @@
-<?php
-
-print 'test';
+test2
