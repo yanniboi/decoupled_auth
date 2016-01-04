@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\decoupled_auth\User.
+ * Contains \Drupal\decoupled_auth\Entity\User.
  */
 
-namespace Drupal\decoupled_auth;
+namespace Drupal\decoupled_auth\Entity;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\user\Entity\User as CoreUser;
