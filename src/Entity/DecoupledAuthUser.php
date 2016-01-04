@@ -7,6 +7,7 @@
 
 namespace Drupal\decoupled_auth\Entity;
 
+use Drupal\decoupled_auth\DecoupledAuthUserInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\user\Entity\User;
