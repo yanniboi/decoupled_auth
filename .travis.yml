@@ -45,6 +45,7 @@ env:
 
     # Simpletest specific commandline arguments, the DRUPAL_TI_SIMPLETEST_GROUP is appended at the end.
     - DRUPAL_TI_SIMPLETEST_ARGS="--verbose --color --concurrency 4 --url $DRUPAL_TI_WEBSERVER_URL:$DRUPAL_TI_WEBSERVER_PORT --module user"
+    - SIMPLETEST_BASE_URL="http://127.0.0.1:8080"
 
     # Behat specific variables.
     # Not using Behat atm.
@@ -95,7 +96,7 @@ mysql:
 before_install:
   - composer self-update
   #- git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
-  - composer global require "yanniboi/drupal_ti:dev-master"
+  - composer global require "lionsad/drupal_ti:dev-master"
   - drupal-ti before_install
 
 install:
