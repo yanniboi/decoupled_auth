@@ -7,13 +7,13 @@
 
 namespace Drupal\decoupled_auth;
 
-use Drupal\user\UserStorageSchema as CoreUserStorageSchema;
+use Drupal\user\UserStorageSchema;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Defines the decoupled user schema handler.
  */
-class UserStorageSchema extends CoreUserStorageSchema {
+class DecoupledAuthUserStorageSchema extends UserStorageSchema {
 
   /**
    * {@inheritdoc}

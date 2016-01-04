@@ -10,19 +10,33 @@
  * Implements hook_install().
  */
 function decoupled_auth_install() {
-  $manager = \Drupal::entityDefinitionUpdateManager();
+  $manager = Drupal::entityDefinitionUpdateManager();
 
   // Get hold of our user type definition.
   $user_type = $manager->getEntityType('user');
 
   // Switch to our own class and inform the entity definition manager.
-  $user_type->setClass('Drupal\decoupled_auth\Entity\User');
-  $user_type->setHandlerClass('storage_schema', 'Drupal\decoupled_auth\UserStorageSchema');
+  $user_type->setClass('Drupal\decoupled_auth\Entity\DecoupledAuthUser');
+  $user_type->setHandlerClass('storage_schema', 'Drupal\decoupled_auth\DecoupledAuthUserStorageSchema');
   $manager->updateEntityType($user_type);
 
-  // Perform our change to our fields.
+  // Make name not required at a database level and swap the constraint.
   $name = $manager->getFieldStorageDefinition('name', 'user');
-  $name->setRequired(FALSE);
+  $constraints = $name->getConstraints();
+  unset($constraints['UserName']);
+  unset($constraints['NotNull']);
+  $constraints['DecoupledAuthUserName'] = array();
+  $name
+    ->setRequired(FALSE)
+    ->setConstraints($constraints);
+
+  // Swap to our own required constraint for mail.
+  $mail = $manager->getFieldStorageDefinition('mail', 'user');
+  $constraints = $mail->getConstraints();
+  unset($constraints['UserMailRequired']);
+  $constraints['DecoupledAuthUserMailRequired'] = array();
+  $mail->setConstraints($constraints);
+
   $manager->updateFieldStorageDefinition($name);
 }
 
@@ -30,7 +44,7 @@ function decoupled_auth_install() {
  * Implements hook_uninstall().
  */
 function decoupled_auth_uninstall() {
-  $manager = \Drupal::entityDefinitionUpdateManager();
+  $manager = Drupal::entityDefinitionUpdateManager();
 
   // Get hold of our user type definition.
   $user_type = $manager->getEntityType('user');
@@ -40,8 +54,22 @@ function decoupled_auth_uninstall() {
   $user_type->setHandlerClass('storage_schema', 'Drupal\user\UserStorageSchema');
   $manager->updateEntityType($user_type);
 
-  // Perform our change to our fields.
+  // Revert our name changes.
   $name = $manager->getFieldStorageDefinition('name', 'user');
-  $name->setRequired(TRUE);
+  $constraints = $name->getConstraints();
+  unset($constraints['DecoupledAuthUserName']);
+  $constraints['UserName'] = array();
+  $constraints['NotNull'] = array();
+  $name
+    ->setRequired(FALSE)
+    ->setConstraints($constraints);
+
+  // Revert our mail changes.
+  $mail = $manager->getFieldStorageDefinition('mail', 'user');
+  $constraints = $mail->getConstraints();
+  unset($constraints['DecoupledAuthUserMailRequired']);
+  $constraints['UserMailRequired'] = array();
+  $mail->setConstraints($constraints);
+
   $manager->updateFieldStorageDefinition($name);
 }
