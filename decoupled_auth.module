@@ -11,6 +11,6 @@
 function decoupled_auth_entity_type_build(array &$entity_types) {
   /** @var \Drupal\Core\Entity\EntityTypeInterface $user_type */
   $user_type = $entity_types['user'];
-  $user_type->setClass('Drupal\decoupled_auth\User');
+  $user_type->setClass('Drupal\decoupled_auth\Entity\User');
   $user_type->setHandlerClass('storage_schema', 'Drupal\decoupled_auth\UserStorageSchema');
 }
