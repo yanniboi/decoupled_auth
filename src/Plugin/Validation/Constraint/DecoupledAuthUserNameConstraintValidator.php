@@ -2,13 +2,12 @@
 
 /**
  * @file
- * Contains \Drupal\user\Plugin\Validation\Constraint\UserNameConstraintValidator.
+ * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\UserNameConstraintValidator.
  */
 
 namespace Drupal\decoupled_auth\Plugin\Validation\Constraint;
 
 use Drupal\user\Plugin\Validation\Constraint\UserNameConstraintValidator;
-use Drupal\Core\Field\FieldItemListInterface;
 use Symfony\Component\Validator\Constraint;
 
 /**
