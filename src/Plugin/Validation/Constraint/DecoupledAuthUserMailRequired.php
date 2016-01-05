@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\user\Plugin\Validation\Constraint\UserMailRequired.
+ * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\UserMailRequired.
  */
 
 namespace Drupal\decoupled_auth\Plugin\Validation\Constraint;

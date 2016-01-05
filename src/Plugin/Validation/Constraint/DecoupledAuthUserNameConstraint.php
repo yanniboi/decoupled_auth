@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\user\Plugin\Validation\Constraint\UserNameConstraint.
+ * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\UserNameConstraint.
  */
 
 namespace Drupal\decoupled_auth\Plugin\Validation\Constraint;

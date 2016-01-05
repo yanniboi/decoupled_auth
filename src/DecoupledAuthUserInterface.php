@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\user\UserInterface.
+ * Contains \Drupal\decoupled_auth\UserInterface.
  */
 
 namespace Drupal\decoupled_auth;
