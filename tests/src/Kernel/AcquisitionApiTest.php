@@ -80,12 +80,12 @@ class AcquisitionApiTest extends KernelTestBase {
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
     $acquisition = \Drupal::service('decoupled_auth.acquisition');
 
-    // Create the user we will atempt to acquire.
+    // Create the user we will attempt to acquire.
     $user = $this->createUser();
 
     // Run our acquisition.
     $values = ['mail' => $user->getEmail()];
-    $acquired_user = $acquisition->acquire($values, [], $method);
+    $acquired_user = $acquisition->acquire($values, ['name' => 'decoupled_auth_AcquisitionTest'], $method);
 
     // Check the result.
     if (!$acquired_user) {
@@ -137,6 +137,15 @@ class AcquisitionApiTest extends KernelTestBase {
       $this->assertEquals('acquire', $method, 'Successfully acquired user.');
       $this->assertEquals($user_1->getEmail(), $acquired_user->getEmail(), 'Acquired correct user.');
     }
+  }
+
+  /**
+   * Test the behavior when there are blocked users.
+   *
+   * @covers ::acquire
+   */
+  public function testAcquireBlocked() {
+    // @todo: Write this.
   }
 
   /**
