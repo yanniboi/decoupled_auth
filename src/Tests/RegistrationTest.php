@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\Tests\decoupled_auth\Kernel\AcquisitionApiTest.
+ * Contains \Drupal\decoupled_auth\Tests\RegistrationTest.
  */
 
-namespace Drupal\Tests\decoupled_auth\Kernel;
+namespace Drupal\decoupled_auth\Tests;
 
 use Drupal\simpletest\WebTestBase;
 use Drupal\decoupled_auth\Tests\DecoupledAuthUserCreationTrait;
@@ -28,9 +28,36 @@ class RegistrationTest extends WebTestBase {
    * Test the standard registration process when there is no existing user.
    */
   public function testNormalNone() {
-    // @todo: Change the site config to disable acquisitions.
+    $config = $this->config('user.settings');
+    // Don't require email verification and allow registration by site visitors
+    // without administrator approval.
+    $config
+      ->set('verify_mail', FALSE)
+      ->set('register', USER_REGISTER_VISITORS)
+      ->save();
 
-    // @todo: Test when there is no user (should create).
+    // Disable acquisition on registration.
+    $acquisition_config = $this->config('decoupled_auth.settings');
+    $acquisition_config->set('acquisitions.registration', 0)->save();
+
+    $edit = array();
+    $edit['name'] = $name = $this->randomMachineName();
+    $edit['mail'] = $mail = $edit['name'] . '@example.com';
+    $edit['pass[pass1]'] = $pass = $this->randomMachineName();
+    $edit['pass[pass2]'] = $pass;
+    $this->drupalPostForm('user/register', $edit, t('Create new account'));
+    $this->assertText(t('Registration successful. You are now logged in.'));
+
+    $user_storage = $this->container->get('entity_type.manager')->getStorage('user');
+    $accounts = $user_storage->loadByProperties( array(
+      'name' => $name,
+    ));
+
+    if (!empty($accounts)) {
+      $account = reset($accounts);
+      $this->assertTrue($account->isActive());
+      $this->assertEqual($name, $account->getUsername());
+    }
   }
 
   /**
@@ -38,6 +65,21 @@ class RegistrationTest extends WebTestBase {
    */
   public function testAcquisitionNone() {
     // @todo: Test when there is no user (should create).
+    $edit = array();
+    $edit['name'] = $name = $this->randomMachineName();
+    $edit['mail'] = $mail = $edit['name'] . '@example.com';
+    $this->drupalPostForm('user/register', $edit, t('Create new account'));
+
+    $user_storage = $this->container->get('entity_type.manager')->getStorage('user');
+    $accounts = $user_storage->loadByProperties( array(
+      'name' => $name,
+    ));
+
+    if (!empty($accounts)) {
+      $account = reset($accounts);
+      $this->assertTrue($account->isActive());
+      $this->assertEqual($name, $account->getUsername());
+    }
   }
 
   /**
@@ -45,13 +87,54 @@ class RegistrationTest extends WebTestBase {
    * user.
    */
   public function testNormalSingle() {
-    // @todo: Change the site config to disable acquisitions.
+    $config = $this->config('user.settings');
+    // Don't require email verification and allow registration by site visitors
+    // without administrator approval.
+    $config
+      ->set('verify_mail', FALSE)
+      ->set('register', USER_REGISTER_VISITORS)
+      ->save();
 
-    // @todo: Test when the user is decoupled (should create).
-    // This will actually fail validation until
-    // https://www.drupal.org/node/2630366 is in.
+    // Change the site config to disable acquisitions.
+    $acquisition_config = $this->config('decoupled_auth.settings');
+    $acquisition_config->set('acquisitions.registration', 0)->save();
 
-    // @todo: Test when the user is coupled (should fail validation).
+    $user_1 = $this->createDecoupledUser();
+    $email = $user_1->email_prefix . '@example.com';
+
+    $edit = array();
+    $edit['name'] = $this->randomMachineName();
+    $edit['mail'] = $email;
+    $edit['pass[pass1]'] = $pass = $this->randomMachineName();
+    $edit['pass[pass2]'] = $pass;
+    $this->drupalPostForm('user/register', $edit, t('Create new account'));
+    $this->assertText(t('Registration successful. You are now logged in.'));
+
+    $this->drupalLogout();
+
+    $user_storage = $this->container->get('entity_type.manager')->getStorage('user');
+    $accounts = $user_storage->loadByProperties( array(
+      'mail' => $email,
+    ));
+
+    if (!empty($accounts)) {
+      $account = reset($accounts);
+      $this->assertTrue($account->isActive());
+      $this->assertEqual($email, $account->getEmail());
+      $this->assertNotEqual($user_1->id(), $account->id());
+    }
+
+    $name = $this->randomMachineName();
+    $email = $name . '@example.com';
+    $this->drupalCreateUser(array(), $name);
+
+    $edit = array();
+    $edit['name'] = $this->randomMachineName();
+    $edit['mail'] = $email;
+    $edit['pass[pass1]'] = $pass = $this->randomMachineName();
+    $edit['pass[pass2]'] = $pass;
+    $this->drupalPostForm('user/register', $edit, t('Create new account'));
+    $this->assertText('The email address ' . $name . '@example.com is already taken.');
   }
 
   /**
@@ -59,9 +142,50 @@ class RegistrationTest extends WebTestBase {
    * user.
    */
   public function testAcquisitionSingle() {
-    // @todo: Test when the user is decoupled (should acquire).
+    $config = $this->config('user.settings');
+    // Don't require email verification and allow registration by site visitors
+    // without administrator approval.
+    $config
+      ->set('verify_mail', FALSE)
+      ->set('register', USER_REGISTER_VISITORS)
+      ->save();
 
-    // @todo: Test when the user is coupled (should fail validation).
+    $user_1 = $this->createDecoupledUser();
+    $email = $user_1->email_prefix . '@example.com';
+
+    $edit = array();
+    $edit['name'] = $this->randomMachineName();
+    $edit['mail'] = $email;
+    $edit['pass[pass1]'] = $pass = $this->randomMachineName();
+    $edit['pass[pass2]'] = $pass;
+    $this->drupalPostForm('user/register', $edit, t('Create new account'));
+    $this->assertText(t('Registration successful. You are now logged in.'));
+
+    $this->drupalLogout();
+
+    $user_storage = $this->container->get('entity_type.manager')->getStorage('user');
+    $accounts = $user_storage->loadByProperties( array(
+      'mail' => $email,
+    ));
+
+    if (!empty($accounts)) {
+      $account = reset($accounts);
+      $this->assertTrue($account->isActive());
+      $this->assertEqual($email, $account->getEmail());
+      $this->assertEqual($user_1->id(), $account->id());
+    }
+
+    $name = $this->randomMachineName();
+    $email = $name . '@example.com';
+    $this->drupalCreateUser(array(), $name);
+
+    $edit = array();
+    $edit['name'] = $this->randomMachineName();
+    $edit['mail'] = $email;
+    $edit['pass[pass1]'] = $pass = $this->randomMachineName();
+    $edit['pass[pass2]'] = $pass;
+    $this->drupalPostForm('user/register', $edit, t('Create new account'));
+    $this->assertText('The email address ' . $name . '@example.com is already taken.');
   }
 
   /**
