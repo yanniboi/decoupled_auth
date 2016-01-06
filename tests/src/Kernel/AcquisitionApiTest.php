@@ -138,7 +138,6 @@ class AcquisitionApiTest extends KernelTestBase {
     $acquired_user_2 = $acquisition->acquire($values, $context, $method);
     $this->assertNull($method, 'Acquisition preformed no action.');
     $this->assertNull($acquired_user_2, 'No user acquired without BEHAVIOR_CREATE.');
-    $this->assertEquals($email, $acquired_user_2->getEmail(), 'Created user has correct email.');
   }
 
   /**
