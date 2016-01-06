@@ -1,0 +1,6 @@
+<?php
+
+/**
+ * @file
+ * Test module to test if event dispatcher is working.
+ */

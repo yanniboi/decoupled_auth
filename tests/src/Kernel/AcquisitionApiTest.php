@@ -26,7 +26,7 @@ class AcquisitionApiTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['decoupled_auth', 'user', 'system'];
+  public static $modules = ['decoupled_auth', 'user', 'system', 'decoupled_auth_event_test'];
 
   /**
    * {@inheritdoc}
@@ -138,6 +138,7 @@ class AcquisitionApiTest extends KernelTestBase {
     $acquired_user_2 = $acquisition->acquire($values, $context, $method);
     $this->assertNull($method, 'Acquisition preformed no action.');
     $this->assertNull($acquired_user_2, 'No user acquired without BEHAVIOR_CREATE.');
+    $this->assertEquals($email, $acquired_user_2->getEmail(), 'Created user has correct email.');
   }
 
   /**
@@ -150,7 +151,7 @@ class AcquisitionApiTest extends KernelTestBase {
     $acquisition = $this->container->get('decoupled_auth.acquisition');
 
     $active_user = $this->createUser();
-    $email = $active_user->original_name . '@example.com';
+    $email = $active_user->getEmail();
 
     $inactive_user = DecoupledAuthUser::create([
       'mail' => $email,
@@ -276,10 +277,20 @@ class AcquisitionApiTest extends KernelTestBase {
   /**
    * Test event subscribers.
    *
+   * @see \Drupal\decoupled_auth_event_test\EventSubscriber\DecoupledAuthEventTestSubscriber.
+   *
    * @covers ::acquire
    */
   public function testAcquireEventSubscribers() {
-    // @todo: Write this.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $acquisition->acquire([], $context, $method);
+    $new_context = $acquisition->getContext();
+
+    $this->assertTrue($new_context['testEventPre']);
+    $this->assertTrue($new_context['testEventPost']);
   }
 
 }
