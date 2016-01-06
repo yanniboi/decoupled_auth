@@ -140,15 +140,6 @@ class AcquisitionApiTest extends KernelTestBase {
   }
 
   /**
-   * Test the behavior when there are blocked users.
-   *
-   * @covers ::acquire
-   */
-  public function testAcquireBlocked() {
-    // @todo: Write this.
-  }
-
-  /**
    * Test the behavior when using the
    * \Drupal\decoupled_auth\AcquisitionServiceInterface::BEHAVIOR_CREATE
    * behavior.
@@ -156,6 +147,15 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireCreate() {
+    // @todo: Write this.
+  }
+
+  /**
+   * Test the behavior when status conditions.
+   *
+   * @covers ::acquire
+   */
+  public function testAcquireStatusCondition() {
     // @todo: Write this.
   }
 
