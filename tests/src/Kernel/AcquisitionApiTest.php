@@ -247,7 +247,7 @@ class AcquisitionApiTest extends KernelTestBase {
   public function testAcquireConfig() {
     // Check the default configuration.
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
     $context = $acquisition->getContext();
     $expected = AcquisitionServiceInterface::BEHAVIOR_CREATE | AcquisitionServiceInterface::BEHAVIOR_PREFER_COUPLED;
     $this->assertEquals($expected, $context['behavior'], 'Default configuration sets the correct default behavior');
@@ -259,7 +259,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Check our updated configuration.
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
     $context = $acquisition->getContext();
     $expected = $expected | AcquisitionServiceInterface::BEHAVIOR_FIRST;
     $this->assertEquals($expected, $context['behavior'], 'Enabling first match configuration sets the correct default behavior');
