@@ -136,6 +136,8 @@ class AcquisitionService implements AcquisitionServiceInterface {
       ->addMetaData('context', $this->context);
 
     // By default, we want to exclude blocked users.
+    // @todo: Allowing both active and blocked users currently conflicts with
+    // the $value === NULL condition below...
     $values += ['status' => 1];
 
     // Add our conditions to the query.
