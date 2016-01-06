@@ -8,6 +8,7 @@
 namespace Drupal\Tests\decoupled_auth\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\decoupled_auth\Entity\DecoupledAuthUser;
 use Drupal\decoupled_auth\Tests\DecoupledAuthUserCreationTrait;
 use Drupal\simpletest\UserCreationTrait;
 use Drupal\decoupled_auth\AcquisitionServiceInterface;
@@ -116,7 +117,28 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireCreate() {
-    // @todo: Write this.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $email = $this->randomMachineName() . '@example.com';
+    $values = ['mail' => $email];
+
+    // Check that user is created by default.
+    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $acquired_user_1 = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user_1) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals('create', $method, 'Successfully created user.');
+    }
+
+    // Remove default behavior and check that no user is created.
+    $context['behavior'] = NULL;
+    $acquired_user_2 = $acquisition->acquire($values, $context, $method);
+    $this->assertNull($method, 'Acquisition preformed no action.');
+    $this->assertNull($acquired_user_2, 'No user acquired without BEHAVIOR_CREATE.');
   }
 
   /**
@@ -125,7 +147,59 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireStatusCondition() {
-    // @todo: Write this.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $active_user = $this->createUser();
+    $email = $active_user->getEmail();
+
+    $inactive_user = DecoupledAuthUser::create([
+      'mail' => $email,
+      'name' => $this->randomMachineName(),
+      'status' => 0,
+    ]);
+    $inactive_user->save();
+
+    // Test acquisition with no status provided.
+    $values = ['mail' => $email];
+    $context = ['name' => 'decoupled_auth_AcquisitionTest', 'behavior' => NULL];
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals($active_user->id(), $acquired_user->id(), 'Active user acquired.');
+    }
+
+    // Test acquisition with active status provided.
+    $values['status'] = 1;
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals($active_user->id(), $acquired_user->id(), 'Active user acquired.');
+    }
+
+    // Test acquisition with inactive status provided.
+    $values['status'] = 0;
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals($inactive_user->id(), $acquired_user->id(), 'Active user acquired.');
+    }
+
+    // Test acquisition with NULL status provided.
+    $values['status'] = NULL;
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    $this->assertNull($acquired_user, 'No user acquired.');
+    $this->assertEquals($acquisition::FAIL_MULTIPLE_MATCHES, $acquisition->getFailCode(), 'Both active and inactive users found.');
   }
 
   /**
@@ -134,16 +208,34 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireRoleConditions() {
-    // @todo: Write this.
-  }
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
 
-  /**
-   * Test acquisitions with other additional conditions.
-   *
-   * @covers ::acquire
-   */
-  public function testAcquireConditions() {
-    // @todo: Write this.
+    $user = $this->createUser();
+    $rid = 'administrator';
+
+    // Test acquisition with no administrator users.
+    $values = ['roles' => $rid];
+    $context = ['name' => 'decoupled_auth_AcquisitionTest', 'behavior' => NULL];
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    $this->assertNull($acquired_user, 'No user acquired.');
+    $this->assertEquals($acquisition::FAIL_NO_MATCHES, $acquisition->getFailCode(), 'Both active and inactive users found.');
+
+    // Make user an administrator.
+    $user->addRole($rid);
+    $user->save();
+
+    // Test acquisition with an administrator user.
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to acquire user.');
+    }
+    else {
+      $this->assertTrue($user->hasRole($rid), 'Acquired user has administrator role.');
+      $this->assertEquals($user->id(), $acquired_user->id(), 'Administrator user acquired.');
+    }
   }
 
   /**
@@ -155,7 +247,7 @@ class AcquisitionApiTest extends KernelTestBase {
   public function testAcquireConfig() {
     // Check the default configuration.
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
     $context = $acquisition->getContext();
     $expected = AcquisitionServiceInterface::BEHAVIOR_CREATE | AcquisitionServiceInterface::BEHAVIOR_PREFER_COUPLED;
     $this->assertEquals($expected, $context['behavior'], 'Default configuration sets the correct default behavior');
@@ -167,7 +259,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Check our updated configuration.
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
     $context = $acquisition->getContext();
     $expected = $expected | AcquisitionServiceInterface::BEHAVIOR_FIRST;
     $this->assertEquals($expected, $context['behavior'], 'Enabling first match configuration sets the correct default behavior');
@@ -176,10 +268,22 @@ class AcquisitionApiTest extends KernelTestBase {
   /**
    * Test event subscribers.
    *
+   * @see \Drupal\decoupled_auth_event_test\EventSubscriber\DecoupledAuthEventTestSubscriber.
+   *
    * @covers ::acquire
    */
   public function testAcquireEventSubscribers() {
-    // @todo: Write this.
+    $this->enableModules('decoupled_auth_event_test');
+
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $acquisition->acquire([], $context, $method);
+    $new_context = $acquisition->getContext();
+
+    $this->assertTrue($new_context['testEventPre']);
+    $this->assertTrue($new_context['testEventPost']);
   }
 
 }
