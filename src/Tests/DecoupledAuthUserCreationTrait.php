@@ -8,6 +8,7 @@
 namespace Drupal\decoupled_auth\Tests;
 
 use Drupal\decoupled_auth\Entity\DecoupledAuthUser;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Provides methods to create additional test users for decoupled auth tests
@@ -20,35 +21,33 @@ trait DecoupledAuthUserCreationTrait {
   /**
    * Create a user with the given email and name.
    *
-   * @var string $name
+   * @var string $email_prefix
    *   This is suffixed with '@example.com' for the mail and, if not decoupled,
    *   is used for the name of the user. If not given, a random name will be
-   *   generated.
-   * @var bool $decoupled
-   *   Whether this should be a decoupled user. Defaults to FALSE.
+   *   generated
    *
    * @return \Drupal\decoupled_auth\Entity\DecoupledAuthUser
    *   The created user.
    */
-  protected function createUser($name = NULL, $decoupled = FALSE) {
+  protected function createDecoupledUser($email_prefix = NULL) {
     // Generate a random name if we don't have one.
-    if (!$name) {
-      $name = $this->randomMachineName();
+    if (!$email_prefix) {
+      $email_prefix = $this->randomMachineName();
     }
 
     // Create and save our user.
     $user = DecoupledAuthUser::create([
-      'mail' => $name . '@example.com',
-      'name' => $decoupled ? NULL : $name,
+      'mail' => $email_prefix . '@example.com',
+      'name' => NULL,
       'status' => 1,
     ]);
     $user->save();
 
     // Set the given name as a property so it can be accessed when the user is
     // decoupled.
-    $user->original_name = $name;
+    $user->email_prefix = $email_prefix;
 
-    $this->assertTrue($user, 'User successfully created.');
+    $this->assertTrue($user, SafeMarkup::format('Decoupled user successfully created with the email %email.', ['%mail' => $user->getEmail()]));
 
     return $user;
   }

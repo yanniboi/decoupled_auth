@@ -9,6 +9,7 @@ namespace Drupal\Tests\decoupled_auth\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\decoupled_auth\Tests\DecoupledAuthUserCreationTrait;
+use Drupal\simpletest\UserCreationTrait;
 use Drupal\decoupled_auth\AcquisitionServiceInterface;
 
 /**
@@ -20,6 +21,7 @@ use Drupal\decoupled_auth\AcquisitionServiceInterface;
 class AcquisitionApiTest extends KernelTestBase {
 
   use DecoupledAuthUserCreationTrait;
+  use UserCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -75,7 +77,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Create our users.
     $user_1 = $this->createUser();
-    $this->createUser($user_1->original_name, TRUE);
+    $this->createDecoupledUser($user_1->getAccountName());
 
     // Set up our values for acquiring.
     $values = ['mail' => $user_1->getEmail()];
