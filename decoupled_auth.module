@@ -21,10 +21,27 @@ function decoupled_auth_entity_type_build(array &$entity_types) {
  * Implements hook_form_BASE_FORM_ID_alter() for user_form.
  */
 function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $user = Drupal::currentUser();
+  // If this is the register form, we need to hook into the entity builders for
+  // acquisitions.
+  if ($form_id == 'user_register_form') {
+    // Check our configuration to see if we want to run acquisitions.
+    if (Drupal::config('decoupled_auth.settings')->get('acquisitions.registration')) {
+      $form['#entity_builders'][] = 'decoupled_auth_form_user_register_form_entity_build';
+    }
+
+    // Add our cache tag for the config.
+    $form['#cache']['tags'][] = 'config:decoupled_auth.settings';
+
+    // The rest of this doesn't need to run at all.
+    return;
+  }
+
+  // Add our cache context for the permission.
+  $form['#cache']['context'][] = 'user.permissions';
 
   // If we don't have administer users, we shouldn't be able to manage the
   // decoupled state of a user.
+  $user = Drupal::currentUser();
   if (!$user->hasPermission('administer users')) {
     return;
   }
@@ -64,6 +81,53 @@ function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_st
 }
 
 /**
+ * Entity build handler for user_register_form.
+ *
+ * Get into the entity build phase so we can run acquisitions.
+ *
+ * @see decoupled_auth_form_user_form_alter()
+ */
+function decoupled_auth_form_user_register_form_entity_build($entity_type, $entity, &$form, &$form_state) {
+  // Attempt to run acquisitions for the given email address.
+  /** @var \Drupal\decoupled_auth\Entity\DecoupledAuthUser $entity */
+  /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+  $acquisition = Drupal::service('decoupled_auth.acquisition');
+
+  // Acquire based on email, but we are only interested in decoupled users.
+  $values = [
+    'mail' => $entity->getEmail(),
+    'decoupled' => TRUE,
+  ];
+
+  // We don't want the default behaviors as we are only interested in decoupled
+  // users and we don't need to create one, as we already have a user object.
+  $context = [
+    'name' => 'user_register_form',
+    'behavior' => Drupal::config('decoupled_auth.settings')->get('acquisitions.registration_first') ? \Drupal\decoupled_auth\AcquisitionServiceInterface::BEHAVIOR_FIRST : NULL,
+  ];
+
+  // Run the acquisition process.
+  $acquired_user = $acquisition->acquire($values, $context, $method);
+
+  // If we get a result, we need to copy the values over.
+  if ($acquired_user) {
+    // Make sure it's not enforced as new.
+    $entity->enforceIsNew(FALSE);
+
+    // Copy our values over.
+    $override = ['uid', 'uuid', 'roles', 'created'];
+    foreach (array_keys($entity->getFields()) as $key) {
+      // If we have a value on the acquired user but not on the new user we'll
+      // copy it over, with the exception of uid, uuid and roles which we'll
+      // override.
+      if (in_array($key, $override) || empty($entity->{$key}->value)) {
+        $entity->{$key} = $acquired_user->{$key}->value;
+      }
+    }
+  }
+}
+
+/**
  * Entity build handler for user_form.
  *
  * @see decoupled_auth_form_user_form_alter()
@@ -88,7 +152,7 @@ function decoupled_auth_element_info_alter(array &$types) {
  */
 function decoupled_auth_form_process_password_confirm($element) {
   if (isset($element['#states'])) {
-    foreach (\Drupal\Core\Render\Element::children($element) as $key) {
+    foreach (Drupal\Core\Render\Element::children($element) as $key) {
       $element[$key]['#states'] = $element['#states'];
     }
   }
