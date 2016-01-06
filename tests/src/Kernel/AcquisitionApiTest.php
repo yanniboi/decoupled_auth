@@ -116,7 +116,28 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireCreate() {
-    // @todo: Write this.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+
+    $email = $this->randomMachineName() . '@example.com';
+    $values = ['mail' => $email];
+
+    // Check that user is created by default.
+    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $acquired_user_1 = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user_1) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals('create', $method, 'Successfully created user.');
+    }
+
+    // Remove default behavior and check that no user is created.
+    $context['behavior'] = NULL;
+    $acquired_user_2 = $acquisition->acquire($values, $context, $method);
+    $this->assertNull($method, 'Acquisition preformed no action.');
+    $this->assertNull($acquired_user_2, 'No user acquired without BEHAVIOR_CREATE.');
   }
 
   /**
