@@ -239,15 +239,6 @@ class AcquisitionApiTest extends KernelTestBase {
   }
 
   /**
-   * Test acquisitions with other additional conditions.
-   *
-   * @covers ::acquire
-   */
-  public function testAcquireConditions() {
-    // @todo: Write this.
-  }
-
-  /**
    * Test that configuration defaults and changes set the correct default
    * context.
    *
