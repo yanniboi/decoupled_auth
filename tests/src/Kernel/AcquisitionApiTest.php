@@ -207,7 +207,34 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireRoleConditions() {
-    // @todo: Write this.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $user = $this->createUser();
+    $rid = 'administrator';
+
+    // Test acquisition with no administrator users.
+    $values = ['roles' => $rid];
+    $context = ['name' => 'decoupled_auth_AcquisitionTest', 'behavior' => NULL];
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    $this->assertNull($acquired_user, 'No user acquired.');
+    $this->assertEquals($acquisition::FAIL_NO_MATCHES, $acquisition->getFailCode(), 'Both active and inactive users found.');
+
+    // Make user an administrator.
+    $user->addRole($rid);
+    $user->save();
+
+    // Test acquisition with an administrator user.
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to acquire user.');
+    }
+    else {
+      $this->assertTrue($user->hasRole($rid), 'Acquired user has administrator role.');
+      $this->assertEquals($user->id(), $acquired_user->id(), 'Administrator user acquired.');
+    }
   }
 
   /**
