@@ -273,7 +273,7 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireEventSubscribers() {
-    $this->enableModules('decoupled_auth_event_test');
+    $this->enableModules(['decoupled_auth_event_test']);
 
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
     $acquisition = $this->container->get('decoupled_auth.acquisition');
