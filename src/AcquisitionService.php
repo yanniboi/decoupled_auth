@@ -99,9 +99,6 @@ class AcquisitionService implements AcquisitionServiceInterface {
 
       // Re-run the find match with our new context.
       $user = $this->findMatch($values, $new_context);
-
-      // Copy our new fail status in over the old one.
-      $this->failCode = $new_context['fail'];
     }
 
 
