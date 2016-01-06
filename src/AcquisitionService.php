@@ -181,7 +181,7 @@ class AcquisitionService implements AcquisitionServiceInterface {
     }
 
     // Store something helpful in $this->context.
-    $context['fail'] = count($uids) ? self::FAIL_MULTIPLE_MATCHES: self::FAIL_NO_MATCHES;
+    $this->failCode = count($uids) ? self::FAIL_MULTIPLE_MATCHES: self::FAIL_NO_MATCHES;
 
     // Otherwise we have nothing to return.
     return NULL;
