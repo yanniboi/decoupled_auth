@@ -136,27 +136,29 @@ class AcquisitionService implements AcquisitionServiceInterface {
       ->addTag('decoupled_auth_acquisition')
       ->addMetaData('values', $values)
       ->addMetaData('context', $this->context);
+    if ($context['name']) {
+      $query->addTag('decoupled_auth_acquisition__' . $context['name']);
+    }
 
     // By default, we want to exclude blocked users.
-    // @todo: Allowing both active and blocked users currently conflicts with
-    // the $value === NULL condition below...
     $values += ['status' => 1];
 
     // Add our conditions to the query.
     foreach ($values as $key => $value) {
+      // Don't do anything if the value is NULL so that we can skip the default
+      // status filter.
+      if ($value === NULL) {
+        continue;
+      }
       // 'decoupled' is a special column.
       // @todo: Switch this to a field so it can be queried generally.
-      if ($key == 'decoupled') {
+      elseif ($key == 'decoupled') {
         if ($value) {
           $query->notExists('name');
         }
         else {
           $query->exists('name');
         }
-      }
-      // NULL needs to be dealt with specially.
-      elseif ($value === NULL) {
-        $query->notExists($key);
       }
       else {
         $query->condition($key, $value);

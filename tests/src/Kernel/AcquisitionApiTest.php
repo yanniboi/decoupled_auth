@@ -286,4 +286,39 @@ class AcquisitionApiTest extends KernelTestBase {
     $this->assertTrue($new_context['testEventPost']);
   }
 
+  /**
+   * Test altering of acquisition queries.
+   *
+   * @covers ::findMatch
+   */
+  public function testAcquireQueryAlter() {
+    $this->enableModules(['decoupled_auth_event_test']);
+
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $user = $this->createUser();
+
+    // Run without expecting a query alter (to verify the following tests are
+    // true failures to acquire).
+    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $acquired_user = $acquisition->acquire(['mail' => $user->getEmail()], $context, $method);
+    if (!$acquired_user) {
+      $this->fail('Failed to acquire user.');
+    }
+    else {
+      $this->assertEquals($user->id(), $acquired_user->id(), 'Successfully acquired correct user.');
+    }
+
+    // Run with a generic query alter.
+    $context = ['_query_alter' => 'generic'];
+    $acquisition->acquire(['mail' => $user->getEmail()], $context, $method);
+    $this->assertEquals($acquisition::FAIL_NO_MATCHES, $acquisition->getFailCode(), 'Correctly found no matches with a generic query alter.');
+
+    // Run with a specific query alter.
+    $context = ['_query_alter' => 'specific'];
+    $acquisition->acquire(['mail' => $user->getEmail()], $context, $method);
+    $this->assertEquals($acquisition::FAIL_NO_MATCHES, $acquisition->getFailCode(), 'Correctly found no matches with a specifc query alter.');
+  }
+
 }

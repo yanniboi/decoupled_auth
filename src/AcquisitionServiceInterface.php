@@ -62,8 +62,9 @@ interface AcquisitionServiceInterface {
    *
    * @param array $values
    *   An array of fields to match on. Keys are the field and values are the
-   *   expected values. This can be any field on a user. If set to NULL,
-   *   \Drupal\Core\Entity\Query\QueryInterface::notExists() will be used.
+   *   expected values. This can be any field on a user. These are applied as
+   *   simple conditions. For more complex querying, provide $context['name']
+   *   and alter the query using the tag decoupled_auth_acquisition__NAME.
    * @param array $context
    *   An array of contextual information for the acquisition. The following
    *   key/value pairs are always available. Calling modules may

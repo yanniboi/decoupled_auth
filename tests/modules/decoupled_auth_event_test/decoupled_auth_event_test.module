@@ -4,3 +4,23 @@
  * @file
  * Test module to test if event dispatcher is working.
  */
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function decoupled_auth_event_test_query_decoupled_auth_acquisition_alter(Drupal\Core\Database\Query\AlterableInterface $query) {
+  $context = $query->getMetaData('context');
+  if (isset($context['_query_alter']) && $context['_query_alter'] == 'generic') {
+    $query->where('1 = 2');
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function decoupled_auth_event_test_query_decoupled_auth_acquisition__decoupled_auth_AcquisitionTest_alter(Drupal\Core\Database\Query\AlterableInterface $query) {
+  $context = $query->getMetaData('context');
+  if (isset($context['_query_alter']) && $context['_query_alter'] == 'specific') {
+    $query->where('1 = 2');
+  }
+}
