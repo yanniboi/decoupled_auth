@@ -8,6 +8,7 @@
 namespace Drupal\decoupled_auth;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 interface AcquisitionServiceInterface {
@@ -54,7 +55,7 @@ interface AcquisitionServiceInterface {
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EventDispatcherInterface $event_dispatcher);
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, EventDispatcherInterface $event_dispatcher);
 
   /**
    * Create or acquire a party based off the given parameters.

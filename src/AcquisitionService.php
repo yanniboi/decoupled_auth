@@ -8,6 +8,7 @@
 namespace Drupal\decoupled_auth;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AcquisitionService implements AcquisitionServiceInterface {
@@ -53,9 +54,13 @@ class AcquisitionService implements AcquisitionServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EventDispatcherInterface $event_dispatcher) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, EventDispatcherInterface $event_dispatcher) {
     $this->userStorage = $entity_type_manager->getStorage('user');
     $this->eventDispatcher = $event_dispatcher;
+
+    if ($config_factory->get('decoupled_auth.settings')->get('acquisitions.behavior_first')) {
+      $this->context['behavior'] = $this->context['behavior'] | self::BEHAVIOR_FIRST;
+    }
   }
 
   /**

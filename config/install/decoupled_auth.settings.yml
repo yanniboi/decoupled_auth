@@ -1,3 +1,4 @@
 acquisitions:
-  registration: 1
-  registration_first: 0
+  behavior_first: false
+  registration: true
+  registration_notice_demote: false

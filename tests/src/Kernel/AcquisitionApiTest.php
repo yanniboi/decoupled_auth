@@ -32,6 +32,7 @@ class AcquisitionApiTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
 
+    $this->installConfig(['decoupled_auth']);
     $this->installEntitySchema('user');
     $this->installSchema('system', 'sequences');
   }
@@ -44,7 +45,7 @@ class AcquisitionApiTest extends KernelTestBase {
    */
   public function testAcquireBasic() {
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
 
     // Create the user we will attempt to acquire.
     $user = $this->createUser();
@@ -70,7 +71,7 @@ class AcquisitionApiTest extends KernelTestBase {
    */
   public function testAcquireMultiple() {
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
 
     // Create our users.
     $user_1 = $this->createUser();
@@ -141,6 +142,33 @@ class AcquisitionApiTest extends KernelTestBase {
    */
   public function testAcquireConditions() {
     // @todo: Write this.
+  }
+
+  /**
+   * Test that configuration defaults and changes set the correct default
+   * context.
+   *
+   * @covers ::acquire
+   */
+  public function testAcquireConfig() {
+    // Check the default configuration.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $context = $acquisition->getContext();
+    $expected = AcquisitionServiceInterface::BEHAVIOR_CREATE | AcquisitionServiceInterface::BEHAVIOR_PREFER_COUPLED;
+    $this->assertEquals($expected, $context['behavior'], 'Default configuration sets the correct default behavior');
+
+    // Change the configuration.
+    $this->config('decoupled_auth.settings')
+      ->set('acquisitions.behavior_first', 1)
+      ->save();
+
+    // Check our updated configuration.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $context = $acquisition->getContext();
+    $expected = $expected | AcquisitionServiceInterface::BEHAVIOR_FIRST;
+    $this->assertEquals($expected, $context['behavior'], 'Enabling first match configuration sets the correct default behavior');
   }
 
   /**

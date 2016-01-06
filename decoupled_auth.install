@@ -7,6 +7,38 @@
  */
 
 /**
+ * Implements hook_requirements().
+ */
+function decoupled_auth_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'runtime') {
+    $requirements['decoupled_auth_registration_acquisitions'] = [
+      'title' => t('User registration acquisition verification'),
+      'severity' => REQUIREMENT_OK,
+      'description' => t('It is not recommended that user registration acquisitions are enabled without account verification such as email. This could allow malicious registrations to access data they should not be authorised to see.'),
+    ];
+
+    // If registration acquisitions are enabled but email verification is not,
+    // we probably want to show a warning.
+    if (Drupal::config('decoupled_auth.settings')->get('acquisitions.registration')) {
+      if (!Drupal::config('user.settings')->get('verify_mail')) {
+        // As other verification processes could be enabled, we allow this
+        // message to be disabled.
+        if (!Drupal::config('decoupled_auth.settings')->get('acquisitions.registration_notice_demote')) {
+          $requirements['decoupled_auth_registration_acquisitions']['severity'] = REQUIREMENT_ERROR;
+        }
+        else {
+          $requirements['decoupled_auth_registration_acquisitions']['severity'] = REQUIREMENT_WARNING;
+        }
+      }
+    }
+  }
+
+  return $requirements;
+}
+
+/**
  * Implements hook_install().
  */
 function decoupled_auth_install() {
