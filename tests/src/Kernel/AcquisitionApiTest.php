@@ -117,7 +117,7 @@ class AcquisitionApiTest extends KernelTestBase {
    */
   public function testAcquireCreate() {
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
-    $acquisition = \Drupal::service('decoupled_auth.acquisition');
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
 
     $email = $this->randomMachineName() . '@example.com';
     $values = ['mail' => $email];
@@ -146,7 +146,59 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireStatusCondition() {
-    // @todo: Write this.
+    /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
+    $acquisition = $this->container->get('decoupled_auth.acquisition');
+
+    $active_user = $this->createUser();
+    $email = $active_user->original_name . '@example.com';
+
+    $inactive_user = DecoupledAuthUser::create([
+      'mail' => $email,
+      'name' => $this->randomMachineName(),
+      'status' => 0,
+    ]);
+    $inactive_user->save();
+
+    // Test acquisition with no status provided.
+    $values = ['mail' => $email];
+    $context = ['name' => 'decoupled_auth_AcquisitionTest', 'behavior' => NULL];
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals($active_user->id(), $acquired_user->id(), 'Active user acquired.');
+    }
+
+    // Test acquisition with active status provided.
+    $values['status'] = 1;
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals($active_user->id(), $acquired_user->id(), 'Active user acquired.');
+    }
+
+    // Test acquisition with inactive status provided.
+    $values['status'] = 0;
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    if (!$acquired_user) {
+      $this->fail('Failed to create user.');
+    }
+    else {
+      $this->assertEquals($inactive_user->id(), $acquired_user->id(), 'Active user acquired.');
+    }
+
+    // Test acquisition with NULL status provided.
+    $values['status'] = NULL;
+    $acquired_user = $acquisition->acquire($values, $context, $method);
+
+    $this->assertNull($acquired_user, 'No user acquired.');
+    $this->assertEquals($acquisition::FAIL_MULTIPLE_MATCHES, $acquisition->getFailCode(), 'Both active and inactive users found.');
   }
 
   /**
