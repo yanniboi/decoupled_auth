@@ -1,0 +1,15 @@
+decoupled_auth.settings:
+  type: config_object
+  mapping:
+    acquisitions:
+      type: mapping
+      mapping:
+        behavior_first:
+          type: boolean
+          label: 'Acquire first match'
+        registration:
+          type: boolean
+          label: 'Attempt to acquire a user on registration'
+        registration_notice_demote:
+          type: boolean
+          label: 'Demote the registration verification error to a warning'
