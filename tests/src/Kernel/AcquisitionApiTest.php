@@ -27,7 +27,7 @@ class AcquisitionApiTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['decoupled_auth', 'user', 'system', 'decoupled_auth_event_test'];
+  public static $modules = ['decoupled_auth', 'user', 'system'];
 
   /**
    * {@inheritdoc}
@@ -273,6 +273,8 @@ class AcquisitionApiTest extends KernelTestBase {
    * @covers ::acquire
    */
   public function testAcquireEventSubscribers() {
+    $this->enableModules('decoupled_auth_event_test');
+
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
     $acquisition = $this->container->get('decoupled_auth.acquisition');
 
