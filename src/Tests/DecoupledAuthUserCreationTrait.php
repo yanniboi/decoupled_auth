@@ -3,17 +3,17 @@
 /**
  * @file
  * Contains \Drupal\decoupled_auth\DecoupledAuthUserCreationTrait.
- *
- * This trait is meant to be used only by test classes extending
- * \Drupal\simpletest\TestBase or Drupal\KernelTests\KernelTestBase.
  */
 
-namespace Drupal\decoupled_auth;
+namespace Drupal\decoupled_auth\Tests;
 
 use Drupal\decoupled_auth\Entity\DecoupledAuthUser;
 
 /**
- * Provides methods to create additional test users for decoupled auth tests.
+ * Provides methods to create additional test users for decoupled auth tests
+ *
+ * This trait is meant to be used only by test classes extending
+ * \Drupal\simpletest\TestBase or Drupal\KernelTests\KernelTestBase.
  */
 trait DecoupledAuthUserCreationTrait {
 

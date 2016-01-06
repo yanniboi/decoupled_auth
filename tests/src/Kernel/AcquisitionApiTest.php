@@ -8,7 +8,7 @@
 namespace Drupal\Tests\decoupled_auth\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\decoupled_auth\DecoupledAuthUserCreationTrait;
+use Drupal\decoupled_auth\Tests\DecoupledAuthUserCreationTrait;
 use Drupal\decoupled_auth\AcquisitionServiceInterface;
 
 /**
