@@ -22,17 +22,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['decoupled_auth', 'user', 'system'];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-    $this->installConfig(['decoupled_auth']);
-    $this->installEntitySchema('user');
-    $this->installSchema('system', 'sequences');
-  }
+  public static $modules = ['decoupled_auth', 'user'];
 
   /**
    * Tests some of the Classes that replace core User classes.
