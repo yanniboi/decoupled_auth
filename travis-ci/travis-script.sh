@@ -7,5 +7,5 @@ drupal_ti_ensure_drupal
 drupal_ti_ensure_module_linked
 cd $DRUPAL_TI_DRUPAL_DIR/core
 
-#$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
-$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
+$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
+#$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
