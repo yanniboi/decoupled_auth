@@ -23,6 +23,7 @@ env:
 
     # Configuration variables.
     - DRUPAL_TI_MODULE_NAME="decoupled_auth"
+    - DRUPAL_TI_SIMPLETEST_GROUP="user"
 
     # Not sure what simpletest group we are using yet.
     #- DRUPAL_TI_SIMPLETEST_GROUP="Decoupled Auth"
