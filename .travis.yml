@@ -24,6 +24,8 @@ env:
     # Configuration variables.
     - DRUPAL_TI_MODULE_NAME="decoupled_auth"
     #- DRUPAL_TI_SIMPLETEST_GROUP="user"
+    - DRUPAL_TI_PULL_SIMPLETEST_GROUP="decoupled_auth"
+    - DRUPAL_TI_NON_PULL_SIMPLETEST_GROUP="user"
 
     # Not sure what simpletest group we are using yet.
     #- DRUPAL_TI_SIMPLETEST_GROUP="Decoupled Auth"
@@ -79,7 +81,7 @@ env:
     #- DRUPAL_TI_COVERAGE_FILE="build/logs/clover.xml"
 
     # Debug options
-    - DRUPAL_TI_DEBUG="-x -v"
+    #- DRUPAL_TI_DEBUG="-x -v"
     # Set to "all" to output all files, set to e.g. "xvfb selenium" or "selenium",
     # etc. to only output those channels.
     #- DRUPAL_TI_DEBUG_FILE_OUTPUT="selenium xvfb webserver"
