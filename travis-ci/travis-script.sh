@@ -7,11 +7,11 @@ drupal_ti_ensure_drupal
 drupal_ti_ensure_module_linked
 cd $DRUPAL_TI_DRUPAL_DIR/core
 
-if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
-  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
-else
-  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
-fi
+#if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+#  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
+#else
+#  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
+#fi
 
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
   export ARGS=( $DRUPAL_TI_SIMPLETEST_ARGS )
