@@ -15,3 +15,6 @@ git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/decoupled_au
 
 # Enable main module and submodules.
 drush en -y decoupled_auth
+
+cd ~/.composer/vendor/lionsad/drupal_ti
+git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/drupal_ti_pull_simpletest.patch
