@@ -17,7 +17,9 @@ git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/decoupled_au
 drush en -y decoupled_auth
 
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
-  export DRUPAL_TI_SIMPLETEST_GROUP='user'
+  echo 'Scheduling all simpletests to be run.\n\n'
+  export DRUPAL_TI_SIMPLETEST_GROUP='decoupled_auth'
 else
+  echo 'Scheduling decoupled_auth simpletests to be run.\n\n'
   export DRUPAL_TI_SIMPLETEST_GROUP='decoupled_auth'
 fi

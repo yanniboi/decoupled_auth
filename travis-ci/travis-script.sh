@@ -7,8 +7,10 @@ drupal_ti_ensure_drupal
 drupal_ti_ensure_module_linked
 cd $DRUPAL_TI_DRUPAL_DIR/core
 
-#if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
+  echo 'Scheduling all phpunit tests to be run.\n\n'
 #  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
-#else
-#  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
-#fi
+else
+  echo 'Scheduling decoupled_auth phpunit tests to be run.\n\n'
+  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
+fi
