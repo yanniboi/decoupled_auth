@@ -9,8 +9,8 @@ cd $DRUPAL_TI_DRUPAL_DIR/core
 
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
   echo 'Scheduling all phpunit tests to be run.'
-#  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
-  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
+  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
+#  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
 else
   echo 'Scheduling decoupled_auth phpunit tests to be run.'
   $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
