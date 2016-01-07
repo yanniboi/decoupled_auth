@@ -196,7 +196,7 @@ class RegistrationTest extends WebTestBase {
     $name = $email_prefix = $this->randomMachineName();
     $this->drupalCreateUser(array(), $name);
     $this->registerNewUser('', $email_prefix);
-    $this->assertText('The email address ' . $name . '@example.com is already taken.');
+    $this->assertText('The email address ' . $email_prefix . '@example.com is already taken.');
   }
 
   /**
@@ -215,6 +215,7 @@ class RegistrationTest extends WebTestBase {
     $edit = $this->registerNewUser('', $user_1->email_prefix);
     $this->assertText(t('Registration successful. You are now logged in.'));
 
+    // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
 
     if (empty($accounts)) {
@@ -224,6 +225,7 @@ class RegistrationTest extends WebTestBase {
       $account = reset($accounts);
       $this->assertTrue($account->isActive());
       $this->assertEqual($email, $account->getEmail());
+      $this->assertEqual($edit['name'], $account->getUsername());
       $this->assertEqual($user_1->id(), $account->id());
     }
 
@@ -235,7 +237,7 @@ class RegistrationTest extends WebTestBase {
     $name = $email_prefix = $this->randomMachineName();
     $this->drupalCreateUser(array(), $name);
     $this->registerNewUser('', $email_prefix);
-    $this->assertText('The email address ' . $name . '@example.com is already taken.');
+    $this->assertText('The email address ' . $email_prefix . '@example.com is already taken.');
   }
 
   /**
@@ -258,6 +260,92 @@ class RegistrationTest extends WebTestBase {
     $edit = $this->registerNewUser('', $user_1->email_prefix);
     $this->assertText(t('Registration successful. You are now logged in.'));
 
+    // Load created user and check properties.
+    $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
+
+    if (empty($accounts)) {
+      $this->fail('No User accounts loaded.');
+    }
+    else {
+      $account = reset($accounts);
+      $this->assertTrue($account->isActive());
+      $this->assertEqual($email, $account->getEmail());
+      $this->assertNotEqual($user_1->id(), $account->id());
+      $this->assertNotEqual($user_2->id(), $account->id());
+    }
+
+    // Logout for another test.
+    $this->drupalLogout();
+
+    // Test registering a new user when one existing user is coupled.
+    // Expected result: fail with validation error.
+    $this->registerNewUser('', $user_1->email_prefix);
+    $this->assertText('The email address ' . $user_1->email_prefix . '@example.com is already taken.');
+  }
+
+  /**
+   * Test the acquisition registration process when there is are multiple
+   * existing users.
+   */
+  public function testAcquisitionMultiple() {
+    // Set up test environment configuration,
+    $this->allowUserRegistration();
+
+    // Test registering a new user when all existing users are decoupled.
+    // Expected result: create a new user.
+    // @TODO This will actually fail validation until
+    // https://www.drupal.org/node/2630366 is in.
+    $user_1 = $this->createDecoupledUser();
+    $user_2 = $this->createDecoupledUser($user_1->email_prefix);
+    $email = $user_1->email_prefix . '@example.com';
+
+    $edit = $this->registerNewUser('', $user_1->email_prefix);
+    $this->assertText(t('Registration successful. You are now logged in.'));
+
+    // Load created user and check properties.
+    $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
+
+    if (empty($accounts)) {
+      $this->fail('No User accounts loaded.');
+    }
+    else {
+      $account = reset($accounts);
+      $this->assertTrue($account->isActive());
+      $this->assertEqual($email, $account->getEmail());
+      $this->assertNotEqual($user_1->id(), $account->id());
+      $this->assertNotEqual($user_2->id(), $account->id());
+    }
+
+    // Logout for another test.
+    $this->drupalLogout();
+
+    // Test registering a new user when one existing user is coupled.
+    // Expected result: fail with validation error.
+    $this->registerNewUser('', $user_1->email_prefix);
+    $this->assertText('The email address ' . $user_1->email_prefix . '@example.com is already taken.');
+  }
+
+  /**
+   * Test the acquisition registration process when there is are multiple
+   * existing users and we are acquiring the first.
+   */
+  public function testAcquisitionMultipleFirst() {
+    // Set up test environment configuration,
+    $this->allowUserRegistration();
+    // Change the site config to acquire the first.
+    $this->acquisition_config->set('acquisitions.behavior_first', 1)->save();
+
+    // Test registering a new user when all existing users are decoupled.
+    // Expected result: User should acquire the first existing user.
+    $user_1 = $this->createDecoupledUser();
+    $user_2 = $this->createDecoupledUser($user_1->email_prefix);
+    $this->createDecoupledUser($user_1->email_prefix);
+    $email = $user_1->email_prefix . '@example.com';
+
+    $edit = $this->registerNewUser('', $user_1->email_prefix);
+    // @TODO There is no confirmation message when new decoupled user is created.
+
+    // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
 
     if (empty($accounts)) {
@@ -268,37 +356,16 @@ class RegistrationTest extends WebTestBase {
       $this->assertTrue($account->isActive());
       $this->assertEqual($email, $account->getEmail());
       $this->assertEqual($user_1->id(), $account->id());
-      $this->assertEqual($user_2->id(), $account->id());
+      $this->assertNotEqual($user_2->id(), $account->id());
     }
+
+    // Logout for another test.
+    $this->drupalLogout();
 
     // Test registering a new user when one existing user is coupled.
     // Expected result: fail with validation error.
-    $edit = $this->registerNewUser('', $user_1->email_prefix);
-    $this->assertText('The email address ' . $edit['name'] . '@example.com is already taken.');
-  }
-
-  /**
-   * Test the acquisition registration process when there is are multiple
-   * existing users.
-   */
-  public function testAcquisitionMultiple() {
-    // @todo: Test when the users are all decoupled (should create).
-    // This will actually fail validation until
-    // https://www.drupal.org/node/2630366 is in.
-
-    // @todo: Test when the user one user is coupled (should fail validation).
-  }
-
-  /**
-   * Test the acquisition registration process when there is are multiple
-   * existing users and we are acquiring the first.
-   */
-  public function testAcquisitionMultipleFirst() {
-    // @todo: Change the site config to acquire the first.
-
-    // @todo: Test when the users are all decoupled (should acquire).
-
-    // @todo: Test when the user one user is coupled (should fail validation).
+    $this->registerNewUser('', $user_1->email_prefix);
+    $this->assertText('The email address ' . $user_1->email_prefix . '@example.com is already taken.');
   }
 
 }
