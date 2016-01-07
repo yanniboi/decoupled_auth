@@ -15,3 +15,13 @@ git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/decoupled_au
 
 # Enable main module and submodules.
 drush en -y decoupled_auth
+
+
+if [ -n "$DRUPAL_TI_SIMPLETEST_GROUP" ]
+then
+  echo $DRUPAL_TI_SIMPLETEST_GROUP
+  export DRUPAL_TI_SIMPLETEST_GROUP='cheese'
+  echo $DRUPAL_TI_SIMPLETEST_GROUP
+  export $DRUPAL_TI_SIMPLETEST_GROUP='cheese'
+  echo $DRUPAL_TI_SIMPLETEST_GROUP
+fi
