@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\UserNameConstraintValidator.
+ * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\DecoupledAuthUserNameValidator.
  */
 
 namespace Drupal\decoupled_auth\Plugin\Validation\Constraint;
@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Validates the DecoupledAuthUserName constraint.
  */
-class DecoupledAuthUserNameConstraintValidator extends UserNameConstraintValidator {
+class DecoupledAuthUserNameValidator extends UserNameConstraintValidator {
 
   /**
    * {@inheritdoc}

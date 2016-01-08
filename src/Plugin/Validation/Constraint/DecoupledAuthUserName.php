@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\UserNameConstraint.
+ * Contains \Drupal\decoupled_auth\Plugin\Validation\Constraint\DecoupledAuthUserName.
  */
 
 namespace Drupal\decoupled_auth\Plugin\Validation\Constraint;
@@ -17,7 +17,7 @@ use Drupal\user\Plugin\Validation\Constraint\UserNameConstraint;
  *   label = @Translation("User name (Decoupled auth)", context = "Validation"),
  * )
  */
-class DecoupledAuthUserNameConstraint extends UserNameConstraint {
+class DecoupledAuthUserName extends UserNameConstraint {
 
   public $decoupledNotEmptyMessage = 'Decoupled users cannot have a username.';
 
