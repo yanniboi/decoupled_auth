@@ -2,3 +2,5 @@ acquisitions:
   behavior_first: false
   registration: true
   registration_notice_demote: false
+unique_emails:
+  mode: 'all'

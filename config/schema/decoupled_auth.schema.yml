@@ -13,3 +13,14 @@ decoupled_auth.settings:
         registration_notice_demote:
           type: boolean
           label: 'Demote the registration verification error to a warning'
+    unique_emails:
+      type: mapping
+      mapping:
+        mode:
+          type: string
+          label: 'Unique emails mode'
+        roles:
+          type: sequence
+          sequence:
+            type: string
+            label: 'Selected roles'
