@@ -18,22 +18,30 @@ use Drupal\user\Entity\User;
 class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function postLoad(EntityStorageInterface $storage, array &$entities) {
-    /** @var $entities User[] */
-    parent::postLoad($storage, $entities);
-    foreach ($entities as $entity) {
-      $entity->setDecoupled();
-    }
-  }
-
-  /**
    * Flag to indicate whether this user has decoupled authentication.
    *
    * @var bool
    */
   protected $decoupled = FALSE;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postCreate(EntityStorageInterface $storage) {
+    parent::postCreate($storage);
+    $this->setDecoupled();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function postLoad(EntityStorageInterface $storage, array &$entities) {
+    /** @var $entities DecoupledAuthUser[] */
+    parent::postLoad($storage, $entities);
+    foreach ($entities as $entity) {
+      $entity->setDecoupled();
+    }
+  }
 
   /**
    * {@inheritdoc}
