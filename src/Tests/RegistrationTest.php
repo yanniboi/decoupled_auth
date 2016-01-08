@@ -296,7 +296,7 @@ class RegistrationTest extends WebTestBase {
     // https://www.drupal.org/node/2630366 is in.
     $user_1 = $this->createDecoupledUser();
     $user_2 = $this->createDecoupledUser($user_1->email_prefix);
-    $this->createDecoupledUser($user_1->email_prefix);
+    $user_3 = $this->createDecoupledUser($user_1->email_prefix);
     $email = $user_1->email_prefix . '@example.com';
 
     $edit = $this->registerNewUser('', $user_1->email_prefix);
@@ -312,8 +312,10 @@ class RegistrationTest extends WebTestBase {
       $account = reset($accounts);
       $this->assertTrue($account->isActive());
       $this->assertEqual($email, $account->getEmail());
-      $this->assertEqual($user_1->id(), $account->id());
-      $this->assertNotEqual($user_2->id(), $account->id());
+
+      // Make sure that new user has acquired one of the decoupled users.
+      $user_ids = [$user_1->id(), $user_2->id(), $user_3->id()];
+      $this->assertTrue(in_array($account->id(), $user_ids));
     }
 
     // Test registering a new user when one existing user is coupled.
