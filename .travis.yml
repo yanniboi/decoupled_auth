@@ -25,8 +25,8 @@ env:
     - DRUPAL_TI_MODULE_NAME="decoupled_auth"
     #- DRUPAL_TI_SIMPLETEST_GROUP="user"
     - DRUPAL_TI_PULL_SIMPLETEST_GROUP="decoupled_auth"
-    - DRUPAL_TI_NON_PULL_SIMPLETEST_GROUP="user"
-    - DRUPAL_TI_NON_PULL_SIMPLETEST_GROUP="--all"
+    - DRUPAL_TI_NON_PULL_SIMPLETEST_GROUP="user,decoupled_auth"
+    #- DRUPAL_TI_NON_PULL_SIMPLETEST_GROUP="--all"
 
     # Not sure what simpletest group we are using yet.
     #- DRUPAL_TI_SIMPLETEST_GROUP="Decoupled Auth"
