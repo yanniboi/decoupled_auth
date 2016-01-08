@@ -19,9 +19,9 @@ use Drupal\Component\Utility\SafeMarkup;
 trait DecoupledAuthUserCreationTrait {
 
   /**
-   * Create a user with the given email and name.
+   * Create a decoupled user with the given email and save it.
    *
-   * @var string $email_prefix
+   * @param string $email_prefix
    *   This is suffixed with '@example.com' for the mail and, if not decoupled,
    *   is used for the name of the user. If not given, a random name will be
    *   generated
@@ -30,24 +30,44 @@ trait DecoupledAuthUserCreationTrait {
    *   The created user.
    */
   protected function createDecoupledUser($email_prefix = NULL) {
+    $user = $this->createUnsavedUser(TRUE, $email_prefix);
+    $user->save();
+    $this->assertTrue($user, SafeMarkup::format('Decoupled user successfully created with the email %email.', ['%mail' => $user->getEmail()]));
+    return $user;
+  }
+
+  /**
+   * Create a user  with the given email without saving it.
+   *
+   * @param bool $decoupled
+   *   Whether the created user should be decoupled. If coupled, 'name' will be
+   *   set to $email_prefix.
+   * @param string $email_prefix
+   *   This is suffixed with '@example.com' for the mail and, if not decoupled,
+   *   is used for the name of the user. If not given, a random name will be
+   *   generated
+   *
+   * @return \Drupal\decoupled_auth\Entity\DecoupledAuthUser
+   *   The created unsaved user.
+   */
+  protected function createUnsavedUser($decoupled = TRUE, $email_prefix = NULL) {
     // Generate a random name if we don't have one.
     if (!$email_prefix) {
       $email_prefix = $this->randomMachineName();
     }
 
     // Create and save our user.
+    /** @var \Drupal\decoupled_auth\Entity\DecoupledAuthUser $user */
     $user = DecoupledAuthUser::create([
       'mail' => $email_prefix . '@example.com',
-      'name' => NULL,
+      'name' => $decoupled ? NULL : $email_prefix,
       'status' => 1,
     ]);
-    $user->save();
+    $user->setDecoupled($decoupled);
 
     // Set the given name as a property so it can be accessed when the user is
     // decoupled.
     $user->email_prefix = $email_prefix;
-
-    $this->assertTrue($user, SafeMarkup::format('Decoupled user successfully created with the email %email.', ['%mail' => $user->getEmail()]));
 
     return $user;
   }
