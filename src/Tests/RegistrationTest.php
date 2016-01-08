@@ -11,7 +11,7 @@ use Drupal\simpletest\WebTestBase;
 use Drupal\decoupled_auth\Tests\DecoupledAuthUserCreationTrait;
 
 /**
- * Tests the Migration entity.
+ * Tests User registration with and without Acquisition.
  *
  * @group decoupled_auth
  */
@@ -49,17 +49,6 @@ class RegistrationTest extends WebTestBase {
   }
 
   /**
-   * Don't require email verification and allow registration by site visitors
-   * without administrator approval.
-   */
-  protected function allowUserRegistration() {
-    $this->user_config
-      ->set('verify_mail', FALSE)
-      ->set('register', USER_REGISTER_VISITORS)
-      ->save();
-  }
-
-  /**
    * Disable acquisition on registration.
    */
   protected function disableRegistrationAcquisition() {
@@ -71,20 +60,14 @@ class RegistrationTest extends WebTestBase {
    *
    * @param string $name
    * @param string $mail_prefix
-   * @param string $pass
    *
    * @return array
    *   Array of information that was used to create user.
    */
-  protected function registerNewUser($name = '', $mail_prefix = '', $pass = '') {
+  protected function registerNewUser($name = '', $mail_prefix = '') {
     $edit = array();
     $edit['name'] = $name ? $name : $this->randomMachineName();
     $edit['mail'] = $mail_prefix ? $mail_prefix . '@example.com' : $edit['name'] . '@example.com';
-
-    if (!is_null($pass)) {
-      $edit['pass[pass1]'] = $pass ? $pass : $this->randomMachineName();
-      $edit['pass[pass2]'] = $edit['pass[pass1]'];
-    }
 
     $this->drupalPostForm('user/register', $edit, t('Create new account'));
 
@@ -111,13 +94,11 @@ class RegistrationTest extends WebTestBase {
    */
   public function testNormalNone() {
     // Set up test environment configuration,
-    $this->allowUserRegistration();
     $this->disableRegistrationAcquisition();
 
     // Test registering a new user when there are no existing users.
     // Expected result: create a new user.
     $edit = $this->registerNewUser();
-    $this->assertText(t('Registration successful. You are now logged in.'));
 
     // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
@@ -138,7 +119,7 @@ class RegistrationTest extends WebTestBase {
   public function testAcquisitionNone() {
     // Test registering a new user when there are no existing users.
     // Expected result: create a new user.
-    $edit = $this->registerNewUser('', '', NULL);
+    $edit = $this->registerNewUser('', '');
     // @TODO There is no confirmation message when new decoupled user is created.
 
     // Load created user and check properties.
@@ -160,7 +141,6 @@ class RegistrationTest extends WebTestBase {
    */
   public function testNormalSingle() {
     // Set up test environment configuration,
-    $this->allowUserRegistration();
     $this->disableRegistrationAcquisition();
 
     // Test registering a new user when the single existing user is decoupled.
@@ -170,7 +150,6 @@ class RegistrationTest extends WebTestBase {
     $user_1 = $this->createDecoupledUser();
     $email = $user_1->email_prefix . '@example.com';
     $edit = $this->registerNewUser('', $user_1->email_prefix);
-    $this->assertText(t('Registration successful. You are now logged in.'));
 
     // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
@@ -188,9 +167,6 @@ class RegistrationTest extends WebTestBase {
       $this->assertNotEqual($user_1->id(), $account->id());
     }
 
-    // Logout for another test.
-    $this->drupalLogout();
-
     // Test registering a new user when the single existing user is coupled.
     // Expected result: fail with validation error.
     $name = $email_prefix = $this->randomMachineName();
@@ -204,16 +180,12 @@ class RegistrationTest extends WebTestBase {
    * user.
    */
   public function testAcquisitionSingle() {
-    // Set up test environment configuration,
-    $this->allowUserRegistration();
-
     // Test registering a new user when the single existing user is decoupled.
     // Expected result: User should acquire the existing user.
     $user_1 = $this->createDecoupledUser();
     $email = $user_1->email_prefix . '@example.com';
 
     $edit = $this->registerNewUser('', $user_1->email_prefix);
-    $this->assertText(t('Registration successful. You are now logged in.'));
 
     // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
@@ -229,9 +201,6 @@ class RegistrationTest extends WebTestBase {
       $this->assertEqual($user_1->id(), $account->id());
     }
 
-    // Logout for another test.
-    $this->drupalLogout();
-
     // Test registering a new user when the single existing user is coupled.
     // Expected result: fail with validation error.
     $name = $email_prefix = $this->randomMachineName();
@@ -246,7 +215,6 @@ class RegistrationTest extends WebTestBase {
    */
   public function testNormalMultiple() {
     // Set up test environment configuration,
-    $this->allowUserRegistration();
     $this->disableRegistrationAcquisition();
 
     // Test registering a new user when all existing users are decoupled.
@@ -258,7 +226,6 @@ class RegistrationTest extends WebTestBase {
     $email = $user_1->email_prefix . '@example.com';
 
     $edit = $this->registerNewUser('', $user_1->email_prefix);
-    $this->assertText(t('Registration successful. You are now logged in.'));
 
     // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
@@ -273,9 +240,6 @@ class RegistrationTest extends WebTestBase {
       $this->assertNotEqual($user_1->id(), $account->id());
       $this->assertNotEqual($user_2->id(), $account->id());
     }
-
-    // Logout for another test.
-    $this->drupalLogout();
 
     // Test registering a new user when one existing user is coupled.
     // Expected result: fail with validation error.
@@ -288,9 +252,6 @@ class RegistrationTest extends WebTestBase {
    * existing users.
    */
   public function testAcquisitionMultiple() {
-    // Set up test environment configuration,
-    $this->allowUserRegistration();
-
     // Test registering a new user when all existing users are decoupled.
     // Expected result: create a new user.
     // @TODO This will actually fail validation until
@@ -300,7 +261,6 @@ class RegistrationTest extends WebTestBase {
     $email = $user_1->email_prefix . '@example.com';
 
     $edit = $this->registerNewUser('', $user_1->email_prefix);
-    $this->assertText(t('Registration successful. You are now logged in.'));
 
     // Load created user and check properties.
     $accounts = $this->getUsersByProperty(['name' => $edit['name']]);
@@ -316,9 +276,6 @@ class RegistrationTest extends WebTestBase {
       $this->assertNotEqual($user_2->id(), $account->id());
     }
 
-    // Logout for another test.
-    $this->drupalLogout();
-
     // Test registering a new user when one existing user is coupled.
     // Expected result: fail with validation error.
     $this->registerNewUser('', $user_1->email_prefix);
@@ -330,13 +287,13 @@ class RegistrationTest extends WebTestBase {
    * existing users and we are acquiring the first.
    */
   public function testAcquisitionMultipleFirst() {
-    // Set up test environment configuration,
-    $this->allowUserRegistration();
     // Change the site config to acquire the first.
     $this->acquisition_config->set('acquisitions.behavior_first', 1)->save();
 
     // Test registering a new user when all existing users are decoupled.
     // Expected result: User should acquire the first existing user.
+    // @TODO This will actually fail validation until
+    // https://www.drupal.org/node/2630366 is in.
     $user_1 = $this->createDecoupledUser();
     $user_2 = $this->createDecoupledUser($user_1->email_prefix);
     $this->createDecoupledUser($user_1->email_prefix);
@@ -358,9 +315,6 @@ class RegistrationTest extends WebTestBase {
       $this->assertEqual($user_1->id(), $account->id());
       $this->assertNotEqual($user_2->id(), $account->id());
     }
-
-    // Logout for another test.
-    $this->drupalLogout();
 
     // Test registering a new user when one existing user is coupled.
     // Expected result: fail with validation error.
