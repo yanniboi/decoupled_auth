@@ -23,7 +23,7 @@ function decoupled_auth_entity_type_build(array &$entity_types) {
 function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // If this is the register form, we need to hook into the entity builders for
   // acquisitions.
-  if ($form_id == 'user_register_form') {
+  if ($form_id == 'user_register_form' && !Drupal::currentUser()->hasPermission('administer users')) {
     // Check our configuration to see if we want to run acquisitions.
     if (Drupal::config('decoupled_auth.settings')->get('acquisitions.registration')) {
       $form['#entity_builders'][] = 'decoupled_auth_form_user_register_form_entity_build';
