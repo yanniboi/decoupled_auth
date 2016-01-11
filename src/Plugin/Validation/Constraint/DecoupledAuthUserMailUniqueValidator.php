@@ -57,6 +57,11 @@ class DecoupledAuthUserMailUniqueValidator extends ConstraintValidator {
         return;
       }
     }
+    // If our mode is \Drupal\decoupled_auth\DecoupledAuthConfig::UNIQUE_EMAILS_MODE_COUPLED and the user is decoupled, we don't need to do
+    // any further checks.
+    elseif ($mode == DecoupledAuthConfig::UNIQUE_EMAILS_MODE_COUPLED && $entity->isDecoupled()) {
+      return;
+    }
 
     $query = \Drupal::entityQuery($entity_type_id)
       // The id could be NULL, so we cast it to 0 in that case.
