@@ -24,12 +24,31 @@ interface DecoupledAuthUserInterface extends UserInterface {
   public function isDecoupled();
 
   /**
-   * Set the decoupled state of this user.
+   * Set this user to the decoupled state.
    *
-   * @param bool|NULL $decoupled
-   *   Whether the user is decoupled. If NULL, we work it out from whether name
-   *   is set. If FALSE, we clear out name/pass.
+   * @return DecoupledAuthUserInterface
    */
-  public function setDecoupled($decoupled = NULL);
+  public function decouple();
+
+  /**
+   * Check whether this user is decoupled.
+   *
+   * @return bool
+   */
+  public function isCoupled();
+
+  /**
+   * Set this user to the coupled state.
+   *
+   * @return DecoupledAuthUserInterface
+   */
+  public function couple();
+
+  /**
+   * Calculate the decoupled state of this user.
+   *
+   * @return bool
+   */
+  public function calculateDecoupled();
 
 }
