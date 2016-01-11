@@ -9,7 +9,7 @@ namespace Drupal\decoupled_auth\Plugin\views\field;
 
 use Drupal\views\Plugin\views\display\DisplayPluginBase;
 use Drupal\views\ViewExecutable;
-use Drupal\views\Plugin\views\field\Boolean;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
 /**
@@ -19,7 +19,7 @@ use Drupal\views\ResultRow;
  *
  * @ViewsField("user_decoupled")
  */
-class Decoupled extends Boolean {
+class Decoupled extends FieldPluginBase {
 
   /**
    * {@inheritdoc}

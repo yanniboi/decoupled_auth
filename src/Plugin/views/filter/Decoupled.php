@@ -85,7 +85,7 @@ class Decoupled extends FilterPluginBase {
     $field = 'users_field_data.name';
     $or =  new Condition('OR');
 
-    if (empty($this->value)) {
+    if (empty($this->value) || $this->value == ['0']) {
       $or->condition($field, NULL, 'IS NOT NULL');
     }
     else {
