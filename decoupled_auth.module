@@ -135,7 +135,7 @@ function decoupled_auth_form_user_register_form_entity_build($entity_type, $enti
 function decoupled_auth_form_user_form_entity_build($entity_type, $entity, &$form, &$form_state) {
   // If we are not decoupling, process when things are required.
   /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $entity */
-  $entity->setDecoupled(!$form_state->getValue('not_decoupled'));
+  $form_state->getValue('not_decoupled') ?: $entity->decouple();
 }
 
 /**
