@@ -85,17 +85,6 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function setDecoupled($decoupled = NULL) {
-    $this->decoupled = $decoupled ?: $this->name->value === NULL;
-    if ($this->decoupled) {
-      $this->name = NULL;
-      $this->pass = NULL;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
     $fields = parent::baseFieldDefinitions($entity_type);
 
