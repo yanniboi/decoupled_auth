@@ -50,7 +50,7 @@ trait DecoupledAuthUserCreationTrait {
    * @return \Drupal\decoupled_auth\Entity\DecoupledAuthUser
    *   The created unsaved user.
    */
-  protected function createUnsavedUser($decoupled = TRUE, $email_prefix = NULL) {
+  protected function createUnsavedUser($decoupled, $email_prefix = NULL) {
     // Generate a random name if we don't have one.
     if (!$email_prefix) {
       $email_prefix = $this->randomMachineName();

@@ -76,10 +76,17 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
       ->setRequired(FALSE)
       ->setConstraints($constraints);
 
-    // Swap to our own required constraint for mail.
+    // Make adjustments to mail.
     $constraints = $fields['mail']->getConstraints();
+
+    // Swap to our own unique constraint for mail.
+    unset($constraints['UserMailUnique']);
+    $constraints['DecoupledAuthUserMailUnique'] = array();
+
+    // Swap to our own required constraint for mail.
     unset($constraints['UserMailRequired']);
     $constraints['DecoupledAuthUserMailRequired'] = array();
+
     $fields['mail']->setConstraints($constraints);
 
     return $fields;
