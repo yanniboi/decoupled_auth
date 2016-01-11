@@ -105,7 +105,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
     // Test username nonempty validation.
     // Expected: validation errors.
     $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
-    $user_2->setDecoupled(TRUE);
+    $user_2->decouple();
     $username = $user_2->email_prefix;
     $user_2->setUsername($username);
     $messages = $this->getUserValidation($user_2);
