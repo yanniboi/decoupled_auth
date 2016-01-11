@@ -227,7 +227,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeIncludeNone() {
+  public function testModeWithRoleNone() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE, [$role]);
 
@@ -265,7 +265,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeIncludeDecoupledWithoutRole() {
+  public function testModeWithRoleDecoupledWithoutRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE, [$role]);
 
@@ -305,7 +305,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeIncludeDecoupledWithRole() {
+  public function testModeWithRoleDecoupledWithRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE, [$role]);
 
@@ -347,7 +347,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeIncludeCoupledWithoutRole() {
+  public function testModeWithRoleCoupledWithoutRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE, [$role]);
 
@@ -387,7 +387,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeIncludeCoupledWithRole() {
+  public function testModeWithRoleCoupledWithRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE, [$role]);
 
@@ -429,7 +429,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeExcludeNone() {
+  public function testModeWithoutRoleNone() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE, [$role]);
 
@@ -467,7 +467,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeExcludeDecoupledWithoutRole() {
+  public function testModeWithoutRoleDecoupledWithoutRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE, [$role]);
 
@@ -507,7 +507,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeExcludeDecoupledWithRole() {
+  public function testModeWithoutRoleDecoupledWithRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE, [$role]);
 
@@ -549,7 +549,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeExcludeCoupledWithoutRole() {
+  public function testModeWithoutRoleCoupledWithoutRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE, [$role]);
 
@@ -589,7 +589,7 @@ class UniqueEmailTest extends KernelTestBase {
    *
    * @covers ::validate
    */
-  public function testModeExcludeCoupledWithRole() {
+  public function testModeWithoutRoleCoupledWithRole() {
     $role = $this->createRole([]);
     $this->setUniqueEmailsConfig(DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE, [$role]);
 
