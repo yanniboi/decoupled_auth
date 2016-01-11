@@ -46,7 +46,6 @@ class RegistrationTest extends WebTestBase {
 
     $this->user_config = $this->config('user.settings');
     $this->acquisition_config = $this->config('decoupled_auth.settings');
-    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
   }
 
   /**
@@ -143,11 +142,11 @@ class RegistrationTest extends WebTestBase {
   public function testNormalSingle() {
     // Set up test environment configuration,
     $this->disableRegistrationAcquisition();
+    // Allow all decoupled users to have non-unique emails.
+    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when the single existing user is decoupled.
     // Expected result: create a new user.
-    // @TODO This will actually fail validation until
-    // https://www.drupal.org/node/2630366 is in.
     $user_1 = $this->createDecoupledUser();
     $email = $user_1->email_prefix . '@example.com';
     $edit = $this->registerNewUser('', $user_1->email_prefix);
@@ -217,11 +216,11 @@ class RegistrationTest extends WebTestBase {
   public function testNormalMultiple() {
     // Set up test environment configuration,
     $this->disableRegistrationAcquisition();
+    // Allow all decoupled users to have non-unique emails.
+    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when all existing users are decoupled.
     // Expected result: create a new user.
-    // @TODO This will actually fail validation until
-    // https://www.drupal.org/node/2630366 is in.
     $user_1 = $this->createDecoupledUser();
     $user_2 = $this->createDecoupledUser($user_1->email_prefix);
     $email = $user_1->email_prefix . '@example.com';
@@ -253,10 +252,11 @@ class RegistrationTest extends WebTestBase {
    * existing users.
    */
   public function testAcquisitionMultiple() {
+    // Allow all decoupled users to have non-unique emails.
+    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
+
     // Test registering a new user when all existing users are decoupled.
     // Expected result: create a new user.
-    // @TODO This will actually fail validation until
-    // https://www.drupal.org/node/2630366 is in.
     $user_1 = $this->createDecoupledUser();
     $user_2 = $this->createDecoupledUser($user_1->email_prefix);
     $email = $user_1->email_prefix . '@example.com';
@@ -290,11 +290,11 @@ class RegistrationTest extends WebTestBase {
   public function testAcquisitionMultipleFirst() {
     // Change the site config to acquire the first.
     $this->acquisition_config->set('acquisitions.behavior_first', 1)->save();
+    // Allow all decoupled users to have non-unique emails.
+    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when all existing users are decoupled.
     // Expected result: User should acquire the first existing user.
-    // @TODO This will actually fail validation until
-    // https://www.drupal.org/node/2630366 is in.
     $user_1 = $this->createDecoupledUser();
     $user_2 = $this->createDecoupledUser($user_1->email_prefix);
     $user_3 = $this->createDecoupledUser($user_1->email_prefix);

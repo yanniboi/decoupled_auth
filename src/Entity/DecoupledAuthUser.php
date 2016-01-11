@@ -27,13 +27,6 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function postCreate(EntityStorageInterface $storage) {
-    parent::postCreate($storage);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public static function postLoad(EntityStorageInterface $storage, array &$entities) {
     /** @var $entities DecoupledAuthUser[] */
     parent::postLoad($storage, $entities);
