@@ -46,6 +46,7 @@ class RegistrationTest extends WebTestBase {
 
     $this->user_config = $this->config('user.settings');
     $this->acquisition_config = $this->config('decoupled_auth.settings');
+    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
   }
 
   /**
@@ -119,7 +120,7 @@ class RegistrationTest extends WebTestBase {
   public function testAcquisitionNone() {
     // Test registering a new user when there are no existing users.
     // Expected result: create a new user.
-    $edit = $this->registerNewUser('', '');
+    $edit = $this->registerNewUser();
     // @TODO There is no confirmation message when new decoupled user is created.
 
     // Load created user and check properties.

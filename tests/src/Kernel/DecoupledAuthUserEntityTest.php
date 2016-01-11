@@ -23,6 +23,20 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
   use UserCreationTrait;
 
   /**
+   * Create an unsaved decoupled user.
+   *
+   * @var bool
+   */
+  const UNSAVED_USER_DECOUPLED = TRUE;
+
+  /**
+   * Create an unsaved coupled user.
+   *
+   * @var bool
+   */
+  const UNSAVED_USER_COUPLED = FALSE;
+
+  /**
    * Modules to enable.
    *
    * @var array
@@ -84,13 +98,13 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
   public function testUserNameValidationDecoupled() {
     // Test username empty validation.
     // Expected: no errors.
-    $user_1 = $this->createUnsavedUser(TRUE);
+    $user_1 = $this->createUnsavedUser(self::UNSAVED_USER_DECOUPLED);
     $messages = $this->getUserValidation($user_1);
     $this->assertEmpty($messages, 'No violation errors.');
 
     // Test username nonempty validation.
     // Expected: validation errors.
-    $user_2 = $this->createUnsavedUser(FALSE);
+    $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
     $user_2->setDecoupled(TRUE);
     $username = $user_2->email_prefix;
     $user_2->setUsername($username);
@@ -105,7 +119,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
   public function testUserNameValidationCoupled() {
     // Test username empty validation.
     // Expected: no errors.
-    $user_1 = $this->createUnsavedUser(FALSE);
+    $user_1 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
     $user_1->setUsername(NULL);
     $messages = $this->getUserValidation($user_1);
     $this->assertNotEmpty($messages, 'No violation errors.');
@@ -113,7 +127,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
 
     // Test username nonempty validation.
     // Expected: validation errors.
-    $user_2 = $this->createUnsavedUser(FALSE);
+    $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
     $username = $user_2->email_prefix;
     $messages = $this->getUserValidation($user_2);
     $this->assertEmpty($messages, 'No violation errors.');
@@ -123,7 +137,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
 
     // Test username non unique validation.
     // Expected: validation errors.
-    $user_3 = $this->createUnsavedUser(FALSE, $username);
+    $user_3 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED, $username);
     $messages = $this->getUserValidation($user_3);
     $this->assertNotEmpty($messages, 'No violation errors.');
     $this->assertTrue(in_array('The username %value is already taken.', $messages));
@@ -135,14 +149,14 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
   public function testUserEmailValidationDecoupled() {
     // Test email empty validation.
     // Expected: no errors.
-    $user_1 = $this->createUnsavedUser(TRUE);
+    $user_1 = $this->createUnsavedUser(self::UNSAVED_USER_DECOUPLED);
     $user_1->setEmail(NULL);
     $messages = $this->getUserValidation($user_1);
     $this->assertEmpty($messages, 'No violation errors.');
 
     // Test email nonempty validation.
     // Expected: no errors.
-    $user_2 = $this->createUnsavedUser(TRUE);
+    $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_DECOUPLED);
     $messages = $this->getUserValidation($user_2);
     $this->assertEmpty($messages, 'No violation errors.');
   }
@@ -153,7 +167,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
   public function testUserEmailValidationCoupled() {
     // Test email empty validation.
     // Expected: validation errors.
-    $user_1 = $this->createUnsavedUser(FALSE);
+    $user_1 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
     $user_1->setEmail(NULL);
     $messages = $this->getUserValidation($user_1);
     $this->assertNotEmpty($messages, 'No violation errors.');
@@ -161,7 +175,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
 
     // Test username nonempty validation.
     // Expected: no errors.
-    $user_2 = $this->createUnsavedUser(FALSE);
+    $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
     $email_prefix = $user_2->email_prefix;
     $messages = $this->getUserValidation($user_2);
     $this->assertEmpty($messages, 'No violation errors.');
@@ -171,7 +185,7 @@ class DecoupledAuthUserEntityTest extends KernelTestBase {
 
     // Test username non unique validation.
     // Expected: validation errors.
-    $user_3 = $this->createUnsavedUser(FALSE, $email_prefix);
+    $user_3 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED, $email_prefix);
     $messages = $this->getUserValidation($user_3);
     $this->assertNotEmpty($messages, 'No violation errors.');
     $this->assertTrue(in_array('The email address %value is already taken.', $messages));

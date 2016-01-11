@@ -103,7 +103,7 @@ function decoupled_auth_form_user_register_form_entity_build($entity_type, $enti
   // users and we don't need to create one, as we already have a user object.
   $context = [
     'name' => 'user_register_form',
-    'behavior' => Drupal::config('decoupled_auth.settings')->get('acquisitions.registration_first') ? \Drupal\decoupled_auth\AcquisitionServiceInterface::BEHAVIOR_FIRST : NULL,
+    'behavior' => Drupal::config('decoupled_auth.settings')->get('acquisitions.behavior_first') ? \Drupal\decoupled_auth\AcquisitionServiceInterface::BEHAVIOR_FIRST : NULL,
   ];
 
   // Run the acquisition process.
@@ -135,7 +135,7 @@ function decoupled_auth_form_user_register_form_entity_build($entity_type, $enti
 function decoupled_auth_form_user_form_entity_build($entity_type, $entity, &$form, &$form_state) {
   // If we are not decoupling, process when things are required.
   /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $entity */
-  $entity->setDecoupled(!$form_state->getValue('not_decoupled'));
+  $form_state->getValue('not_decoupled') ?: $entity->decouple();
 }
 
 /**
