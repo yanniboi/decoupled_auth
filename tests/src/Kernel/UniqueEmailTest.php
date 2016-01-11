@@ -208,10 +208,10 @@ class UniqueEmailTest extends KernelTestBase {
     $existing_user = $this->createUser();
 
     // Test validating a decoupled user.
-    // Expected result: Violations
+    // Expected result: No violations
     $user = $this->createUnsavedUser(self::UNSAVED_USER_DECOUPLED, $existing_user->getAccountName());
     $violations = $user->validate();
-    $this->assertNotEmpty($violations, 'Decoupled user fails validation.');
+    $this->assertEmpty($violations, 'Decoupled user passes validation.');
 
     // Test validating a coupled user.
     // Expected result: Violations
