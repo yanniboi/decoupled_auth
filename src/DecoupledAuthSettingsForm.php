@@ -84,12 +84,13 @@ class DecoupledAuthSettingsForm extends ConfigFormBase {
       '#type' => 'radios',
       '#title' => $this->t('Select which users must have unique email addresses'),
       '#options' => [
-        'all' => $this->t('All users'),
-        'include' => $this->t('Any decoupled user with the selected roles'),
-        'exclude' => $this->t('Any decoupled user without the selected roles'),
-        'none' => $this->t('No decoupled users'),
+        DecoupledAuthConfig::UNIQUE_EMAILS_MODE_ALL_USERS => $this->t('All users'),
+        DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE => $this->t('Decoupled users with the selected roles'),
+        DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE => $this->t('Decoupled users without the selected roles'),
+        DecoupledAuthConfig::UNIQUE_EMAILS_MODE_COUPLED => $this->t('Only coupled users'),
       ],
       '#default_value' => $config->get('unique_emails.mode'),
+      '#description' => $this->t("Note a decoupled user that doesn't require a unique email can share an email address with a coupled user."),
     ];
 
     $form['unique_emails']['roles'] = [
@@ -99,8 +100,8 @@ class DecoupledAuthSettingsForm extends ConfigFormBase {
       '#options' => [],
       '#default_value' => $config->get('unique_emails.roles'),
       '#states' => ['visible' => ['input[name="unique_emails[mode]"' => [
-        ['value' => 'include'],
-        ['value' => 'exclude'],
+        ['value' => DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE],
+        ['value' => DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE],
       ]]],
     ];
     foreach (Role::loadMultiple() as $role) {

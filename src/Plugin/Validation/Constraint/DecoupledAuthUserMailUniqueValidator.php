@@ -11,6 +11,7 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\user\Entity\Role;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Drupal\decoupled_auth\DecoupledAuthConfig;
 
 /**
  * Checks if a user's email address is unique on the site within coupled users
@@ -37,13 +38,13 @@ class DecoupledAuthUserMailUniqueValidator extends ConstraintValidator {
     $mode = $config->get('unique_emails.mode');
 
     // If we are using a specific set of roles, get the inclusive list.
-    if (in_array($mode, ['include', 'exclude'])) {
+    if (in_array($mode, [DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE, DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE])) {
       $selected_roles = $config->get('unique_emails.roles');
       $roles = user_role_names(TRUE);
       unset($roles[Role::AUTHENTICATED_ID]);
       $roles = array_keys($roles);
 
-      if ($mode == 'include') {
+      if ($mode == DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE) {
         $roles = array_intersect($roles, $selected_roles);
       }
       else {
@@ -52,7 +53,7 @@ class DecoupledAuthUserMailUniqueValidator extends ConstraintValidator {
 
       // If our current user is decoupled and not in any of the selected roles,
       // we don't need to check anything as duplicates are allowed.
-      if ($entity->isDecoupled() && ($mode == 'include' XOR array_intersect($entity->getRoles(), $selected_roles))) {
+      if ($entity->isDecoupled() && ($mode == DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITH_ROLE XOR array_intersect($entity->getRoles(), $selected_roles))) {
         return;
       }
     }
@@ -64,7 +65,7 @@ class DecoupledAuthUserMailUniqueValidator extends ConstraintValidator {
 
     // Exclude mode needs to be dealt with specially as no roles is also a valid
     // match.
-    if ($mode == 'exclude') {
+    if ($mode == DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE) {
       $condition = $query->orConditionGroup()
         ->exists('name')
         ->notExists('roles');
@@ -83,7 +84,7 @@ class DecoupledAuthUserMailUniqueValidator extends ConstraintValidator {
     }
     // Otherwise, if no decoupled users have to be unique, then we only have to
     // filter on whether the user is coupled.
-    elseif ($mode != 'all') {
+    elseif ($mode != DecoupledAuthConfig::UNIQUE_EMAILS_MODE_ALL_USERS) {
       $query->exists('name');
     }
 
