@@ -105,6 +105,7 @@ class DecoupledAuthSettingsForm extends ConfigFormBase {
       ]]],
     ];
     foreach (Role::loadMultiple() as $role) {
+      /** @var \Drupal\user\Entity\Role $role */
       // We aren't interested in anon/auth roles as thay are locked roles.
       if (!in_array($role->id(), [Role::ANONYMOUS_ID, Role::AUTHENTICATED_ID])) {
         $form['unique_emails']['roles']['#options'][$role->id()] = $role->label();
