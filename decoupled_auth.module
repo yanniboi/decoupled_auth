@@ -21,6 +21,13 @@ function decoupled_auth_entity_type_build(array &$entity_types) {
  * Implements hook_form_BASE_FORM_ID_alter() for user_form.
  */
 function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $account */
+  $account = $form_state->getFormObject()->getEntity();
+  // Make all new users decoupled by default.
+  if ($account->isNew() && is_null($account->name->value)) {
+    $account->name->value = '';
+  }
+
   // If this is the register form, we need to hook into the entity builders for
   // acquisitions.
   if ($form_id == 'user_register_form') {
@@ -45,9 +52,6 @@ function decoupled_auth_form_user_form_alter(&$form, FormStateInterface $form_st
   if (!$user->hasPermission('administer users')) {
     return;
   }
-
-  /** @var \Drupal\decoupled_auth\DecoupledAuthUserInterface $account */
-  $account = $form_state->getFormObject()->getEntity();
 
   // Set a weight on mail so we can insert our checkbox in the right place.
   $form['account']['mail']['#weight'] = -2;
