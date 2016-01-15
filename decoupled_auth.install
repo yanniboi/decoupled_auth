@@ -79,7 +79,9 @@ function decoupled_auth_install() {
   $manager->updateFieldStorageDefinition($name);
 
   // Add the decoupled filter to the people view.
-  decoupled_auth_install_update_user_admin_people_view();
+  if (\Drupal::moduleHandler()->moduleExists('views')) {
+    decoupled_auth_install_update_user_admin_people_view();
+  }
 }
 
 /**
@@ -123,7 +125,9 @@ function decoupled_auth_uninstall() {
   $manager->updateFieldStorageDefinition($name);
 
   // Remove the decoupled filter from the people view.
-  decoupled_auth_uninstall_update_user_admin_people_view();
+  if (\Drupal::moduleHandler()->moduleExists('views')) {
+    decoupled_auth_uninstall_update_user_admin_people_view();
+  }
 }
 
 /**
