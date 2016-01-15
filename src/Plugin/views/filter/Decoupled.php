@@ -14,7 +14,10 @@ use Drupal\views\Plugin\views\filter\FilterPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Filter handler for the current user.
+ * Filter handler for whether user is decoupled.
+ *
+ * Filter handler label is 'Has web account', so therefore if the user IS
+ * decoupled, it does NOT have a web account.
  *
  * @ingroup views_filter_handlers
  *
@@ -28,15 +31,15 @@ class Decoupled extends FilterPluginBase {
   public function init(ViewExecutable $view, DisplayPluginBase $display, array &$options = NULL) {
     parent::init($view, $display, $options);
 
-    $this->value_value = $this->t('Is the user decoupled?');
+    $this->value_value = $this->t('Has web account?');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getValueOptions() {
-    // Provide value options for decoupled/coupled.
-    $this->valueOptions = array(1 => $this->t('Decoupled'), 0 => $this->t('Coupled'));
+    // Provide value options for has web account, Yes or No.
+    $this->valueOptions = array(1 => $this->t('No'), 0 => $this->t('Yes'));
   }
 
   /**

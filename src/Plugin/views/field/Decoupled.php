@@ -13,7 +13,10 @@ use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
 /**
- * Field handler to whether user is decoupled.
+ * Field handler for whether user is decoupled.
+ *
+ * Field handler label is 'Web account', so therefore if the user IS
+ * decoupled, it does NOT have a web account.
  *
  * @ingroup views_field_handlers
  *
@@ -42,7 +45,8 @@ class Decoupled extends FieldPluginBase {
     $uid = $this->getValue($values, 'uid');
     $user = \Drupal::entityTypeManager()->getStorage('user')->load($uid);
 
-    return $user->isDecoupled() ? 'Decoupled' : 'Coupled';
+    // Render whether the user does or does not have a web account.
+    return $user->isDecoupled() ? 'No' : 'Yes';
   }
 
 }
