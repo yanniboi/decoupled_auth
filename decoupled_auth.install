@@ -77,6 +77,26 @@ function decoupled_auth_install() {
   $mail->setConstraints($constraints);
 
   $manager->updateFieldStorageDefinition($name);
+
+  // Install the fields for existing profile types.
+  if (\Drupal::moduleHandler()->moduleExists('profile')) {
+    // Install our profile field.
+    $entity_manager = \Drupal::entityManager();
+    $entity_manager->clearCachedDefinitions();
+    $definitions = $entity_manager->getFieldStorageDefinitions('user');
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      if (isset($definitions[$name])) {
+        $entity_manager->onFieldStorageDefinitionCreate($definitions[$name]);
+      }
+    }
+
+    // @todo: Fill out the fields for existing users. This should probably be
+    // batched.
+  }
 }
 
 /**
@@ -118,4 +138,43 @@ function decoupled_auth_uninstall() {
   $mail->setConstraints($constraints);
 
   $manager->updateFieldStorageDefinition($name);
+
+  // Remove the fields for profile types.
+  if (\Drupal::moduleHandler()->moduleExists('profile')) {
+    $entity_manager = \Drupal::entityManager();
+    $definitions = $entity_manager->getLastInstalledFieldStorageDefinitions('user');
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      if (isset($definitions[$name])) {
+        $entity_manager->onFieldStorageDefinitionDelete($definitions[$name]);
+      }
+    }
+  }
+}
+
+/**
+ * Install the fields for existing profile types.
+ */
+function decoupled_auth_update_8001() {
+  if (\Drupal::moduleHandler()->moduleExists('profile')) {
+    // Install our profile field.
+    $entity_manager = \Drupal::entityManager();
+    $entity_manager->clearCachedDefinitions();
+    $definitions = $entity_manager->getFieldStorageDefinitions('user');
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      if (isset($definitions[$name])) {
+        $entity_manager->onFieldStorageDefinitionCreate($definitions[$name]);
+      }
+    }
+
+    // @todo: Fill out the fields for existing users. This should probably be
+    // batched.
+  }
 }

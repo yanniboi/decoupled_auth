@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_entity_type_build().
@@ -169,5 +170,90 @@ function decoupled_auth_preprocess_form_element(&$variables) {
     if (isset($variables['element']['#attributes']['data-drupal-states'])) {
       $variables['attributes']['data-drupal-states'] = $variables['element']['#attributes']['data-drupal-states'];
     }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function decoupled_auth_module_implements_alter(&$implementations, $hook) {
+  // Remove profile_user_view() and profile_entity_extra_field_info() as they
+  // are now provided by our base fields.
+  if (in_array($hook, ['user_view', 'entity_extra_field_info'])) {
+    unset($implementations['profile']);
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function decoupled_auth_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type) {
+  // If the profile module exists, add the profile fields to the user.
+  if ($entity_type->id() == 'user' && Drupal::moduleHandler()->moduleExists('profile')) {
+    $fields = [];
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      $fields[$name] = BaseFieldDefinition::create('entity_reference')
+        ->setLabel($profile_type->getLabel())
+        ->setReadOnly(TRUE)
+        ->setSetting('target_type', 'profile')
+        ->setSetting('handler_settings', ['target_bundles' => [$profile_type->id()]])
+        ->setDisplayConfigurable('view', TRUE)
+        ->setDisplayOptions('view', [
+          'type' => 'entity_reference_entity_view',
+          'weight' => 10,
+        ])
+        ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED);
+    }
+
+    return $fields;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for profile.
+ */
+function decoupled_auth_profile_insert(Drupal\profile\Entity\ProfileInterface $entity) {
+  $entity->getOwner()->updateProfileFields([$entity->getType()]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for profile.
+ */
+function decoupled_auth_profile_update(Drupal\profile\Entity\ProfileInterface $entity) {
+  $entity->getOwner()->updateProfileFields([$entity->getType()]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for profile.
+ */
+function decoupled_auth_profile_delete(Drupal\profile\Entity\ProfileInterface $entity) {
+  $entity->getOwner()->updateProfileFields([$entity->getType()]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for profile_type.
+ */
+function decoupled_auth_profile_type_insert(Drupal\profile\Entity\ProfileTypeInterface $entity) {
+  // Create our new field.
+  $entity_manager = \Drupal::entityManager();
+  $entity_manager->clearCachedDefinitions();
+  $definitions = $entity_manager->getFieldStorageDefinitions('user');
+  $entity_manager->onFieldStorageDefinitionCreate($definitions['profile_' . $entity->id()]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for profile_type.
+ */
+function decoupled_auth_profile_type_delete(Drupal\profile\Entity\ProfileTypeInterface $entity) {
+  // Create our new field.
+  $entity_manager = \Drupal::entityManager();
+  $definitions = $entity_manager->getLastInstalledFieldStorageDefinitions('user');
+  $name = 'profile_' . $entity->id();
+  if (isset($definitions[$name])) {
+    $entity_manager->onFieldStorageDefinitionDelete($definitions[$name]);
   }
 }
