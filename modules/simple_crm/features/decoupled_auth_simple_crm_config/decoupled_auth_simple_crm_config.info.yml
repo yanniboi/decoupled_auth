@@ -1,0 +1,35 @@
+name: 'Simple CRM Config'
+description: 'Default configuration for the Simple CRM module.'
+type: module
+core: 8.x
+dependencies:
+  - decoupled_auth_simple_crm
+version: 8.x-1.x
+features:
+  required:
+    - core.entity_form_display.profile.individual.default
+    - core.entity_form_display.profile.organisation.default
+    - core.entity_view_display.profile.individual.default
+    - core.entity_view_display.profile.organisation.default
+    - field.field.profile.individual.field_crm_address
+    - field.field.profile.individual.field_crm_dob
+    - field.field.profile.individual.field_crm_email
+    - field.field.profile.individual.field_crm_gender
+    - field.field.profile.individual.field_crm_name
+    - field.field.profile.organisation.field_crm_logo
+    - field.field.profile.organisation.field_crm_org_address
+    - field.field.profile.organisation.field_crm_org_email
+    - field.field.profile.organisation.field_crm_org_name
+    - field.storage.profile.field_crm_address
+    - field.storage.profile.field_crm_dob
+    - field.storage.profile.field_crm_email
+    - field.storage.profile.field_crm_gender
+    - field.storage.profile.field_crm_logo
+    - field.storage.profile.field_crm_name
+    - field.storage.profile.field_crm_org_address
+    - field.storage.profile.field_crm_org_email
+    - field.storage.profile.field_crm_org_name
+    - profile.type.individual
+    - profile.type.organisation
+    - user.role.individual
+    - user.role.organisation

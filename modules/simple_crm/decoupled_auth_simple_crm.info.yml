@@ -10,5 +10,4 @@ dependencies:
   - user
   - profile
   - address
-  - decoupled_auth_simple_crm_indiv
-  - decoupled_auth_simple_crm_org
+  - decoupled_auth_simple_crm_config
