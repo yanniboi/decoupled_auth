@@ -171,3 +171,15 @@ function decoupled_auth_preprocess_form_element(&$variables) {
     }
   }
 }
+
+/**
+ * Implements hook_modules_installed().
+ *
+ * Apply our changes to the user view if views is installed after decoupled_auth.
+ */
+function decoupled_auth_modules_installed($modules) {
+  if (in_array('views', $modules)) {
+    module_load_include('install', 'decoupled_auth', 'decoupled_auth');
+    decoupled_auth_install_update_user_admin_people_view();
+  }
+}
