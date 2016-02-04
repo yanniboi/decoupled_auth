@@ -11,6 +11,7 @@ mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git --depth 1
 git clone --branch 8.x-1.x http://git.drupal.org/project/profile.git --depth 1
+git clone --branch 8.x-1.x http://git.drupal.org/project/address.git --depth 1
 git clone --branch 8.x-1.x http://git.drupal.org/project/entity.git --depth 1
 php composer_manager/scripts/init.php
 
