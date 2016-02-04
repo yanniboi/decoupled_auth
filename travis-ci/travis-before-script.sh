@@ -14,15 +14,16 @@ git clone --branch 8.x-1.x http://git.drupal.org/project/profile.git --depth 1
 git clone --branch 8.x-1.x http://git.drupal.org/project/entity.git --depth 1
 php composer_manager/scripts/init.php
 
-# Update composer dependencies.
-cd $DRUPAL_TI_DRUPAL_DIR
-composer drupal-update
-
 # Ensure the module is linked into the codebase.
 drupal_ti_ensure_module_linked
 
-# Require that decoupled_auth is always enabled when the user module is enabled.
 cd $DRUPAL_TI_DRUPAL_DIR
+
+# Update composer dependencies.
+composer drupal-rebuild
+composer update -n --lock --verbose
+
+# Require that decoupled_auth is always enabled when the user module is enabled.
 git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/decoupled_auth_user_modules_installed.patch
 
 # Allow different simpletests to be run for pull requests by drupal_ti
