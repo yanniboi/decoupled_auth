@@ -13,6 +13,9 @@ git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git --
 git clone --branch 8.x-1.x http://git.drupal.org/project/profile.git --depth 1
 git clone --branch 8.x-1.x http://git.drupal.org/project/entity.git --depth 1
 php composer_manager/scripts/init.php
+
+# Update composer dependencies.
+cd $DRUPAL_TI_DRUPAL_DIR
 composer drupal-update
 
 # Ensure the module is linked into the codebase.
