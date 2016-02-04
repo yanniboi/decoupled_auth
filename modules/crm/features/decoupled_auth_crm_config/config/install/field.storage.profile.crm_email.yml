@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - profile
+_core:
+  default_config_hash: 1zN2QBpTP9dF9qFL2wV4-yKtvq7ZUvaUVVa_VWUoCsY
+id: profile.crm_email
+field_name: crm_email
+entity_type: profile
+type: email
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

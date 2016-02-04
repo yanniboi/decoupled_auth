@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: qRqX41sbRzJHMsiCKimEF-lPGQC-OLKTwCMCvqj0j5M
+id: crm_indiv
+label: Individual
+registration: true
+multiple: false
+roles:
+  crm_indiv: crm_indiv
+weight: 0

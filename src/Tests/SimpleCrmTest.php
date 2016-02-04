@@ -20,7 +20,7 @@ class SimpleCrmTest extends WebTestBase {
   use ProfileTestTrait;
   use DecoupledAuthUserCreationTrait;
 
-  public static $modules = ['user', 'decoupled_auth_simple_crm', 'views'];
+  public static $modules = ['user', 'decoupled_auth_crm', 'views'];
 
   /**
    * Testing admin user.
@@ -44,20 +44,20 @@ class SimpleCrmTest extends WebTestBase {
 
     // Check that the required permissions exist.
     $this->checkPermissions([
-      "view own individual profile",
-      "add own individual profile",
-      "edit own individual profile",
-      "delete own individual profile",
+      "view own crm_indiv profile",
+      "add own crm_indiv profile",
+      "edit own crm_indiv profile",
+      "delete own crm_indiv profile",
     ]);
 
-    // Create a user with permissions for the individual profile type.
+    // Create a user with permissions for the crm_indiv profile type.
     $this->indiv_user = $this->createUser([
-      "view own individual profile",
-      "add own individual profile",
-      "edit own individual profile",
-      "delete own individual profile",
+      "view own crm_indiv profile",
+      "add own crm_indiv profile",
+      "edit own crm_indiv profile",
+      "delete own crm_indiv profile",
     ]);
-    $this->indiv_user->addRole('individual');
+    $this->indiv_user->addRole('crm_indiv');
     $this->indiv_user->save();
     $this->admin_user = $this->createUser([], NULL, TRUE);
 
@@ -181,27 +181,27 @@ class SimpleCrmTest extends WebTestBase {
   public function testContactFields() {
     $this->drupalLogin($this->indiv_user);
 
-    // Submit the profile add form for an individual profile.
+    // Submit the profile add form for an crm_indiv profile.
     $edit = [
-      'field_crm_name[0][value]' => $this->indiv_user->getDisplayName(),
-      'field_crm_email[0][value]' => $this->indiv_user->getEmail(),
-      'field_crm_dob[0][value][year]' => '1990',
-      'field_crm_dob[0][value][month]' => '1',
-      'field_crm_dob[0][value][day]' => '1',
-      'field_crm_gender' => 'female',
+      'crm_name[0][value]' => $this->indiv_user->getDisplayName(),
+      'crm_email[0][value]' => $this->indiv_user->getEmail(),
+      'crm_dob[0][value][year]' => '1990',
+      'crm_dob[0][value][month]' => '1',
+      'crm_dob[0][value][day]' => '1',
+      'crm_gender' => 'female',
     ];
-    $this->drupalPostForm('user/' . $this->indiv_user->id() . '/individual', $edit, t('Save'));
+    $this->drupalPostForm('user/' . $this->indiv_user->id() . '/crm_indiv', $edit, t('Save'));
 
     // Check that the fields have been saved.
-    $this->drupalGet('user/' . $this->indiv_user->id() . '/individual');
+    $this->drupalGet('user/' . $this->indiv_user->id() . '/crm_indiv');
     $this->assertResponse(200);
 
-    $this->assertFieldByName('field_crm_name[0][value]', $this->indiv_user->getDisplayName());
-    $this->assertFieldByName('field_crm_email[0][value]', $this->indiv_user->getEmail());
-    $this->assertFieldByName('field_crm_dob[0][value][year]', '1990');
-    $this->assertFieldByName('field_crm_dob[0][value][month]', '1');
-    $this->assertFieldByName('field_crm_dob[0][value][day]', '1');
-    $this->assertFieldByName('field_crm_gender', 'female');
+    $this->assertFieldByName('crm_name[0][value]', $this->indiv_user->getDisplayName());
+    $this->assertFieldByName('crm_email[0][value]', $this->indiv_user->getEmail());
+    $this->assertFieldByName('crm_dob[0][value][year]', '1990');
+    $this->assertFieldByName('crm_dob[0][value][month]', '1');
+    $this->assertFieldByName('crm_dob[0][value][day]', '1');
+    $this->assertFieldByName('crm_gender', 'female');
   }
 
 }
