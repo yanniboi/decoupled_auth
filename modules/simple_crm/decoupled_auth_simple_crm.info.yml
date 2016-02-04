@@ -10,4 +10,7 @@ dependencies:
   - user
   - profile
   - address
+  - datetime
+  - options
+  - image
   - decoupled_auth_simple_crm_config
