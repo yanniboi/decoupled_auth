@@ -9,3 +9,8 @@ dependencies:
   - decoupled_auth
   - user
   - profile
+  - address
+  - datetime
+  - options
+  - image
+  - decoupled_auth_crm_config

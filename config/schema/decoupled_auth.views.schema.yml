@@ -6,3 +6,7 @@ views.field.user_decoupled:
 views.filter.user_decoupled:
   type: views_filter
   label: 'Decoupled'
+
+views.filter_value.user_decoupled:
+  type: string
+  label: 'Has web account?'
