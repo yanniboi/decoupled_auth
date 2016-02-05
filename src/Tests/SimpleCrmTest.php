@@ -47,16 +47,10 @@ class SimpleCrmTest extends WebTestBase {
       "view own crm_indiv profile",
       "add own crm_indiv profile",
       "edit own crm_indiv profile",
-      "delete own crm_indiv profile",
     ]);
 
     // Create a user with permissions for the crm_indiv profile type.
-    $this->indiv_user = $this->createUser([
-      "view own crm_indiv profile",
-      "add own crm_indiv profile",
-      "edit own crm_indiv profile",
-      "delete own crm_indiv profile",
-    ]);
+    $this->indiv_user = $this->createUser();
     $this->indiv_user->addRole('crm_indiv');
     $this->indiv_user->save();
     $this->admin_user = $this->createUser([], NULL, TRUE);

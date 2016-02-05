@@ -7,4 +7,7 @@ id: crm_indiv
 label: Individual
 weight: 3
 is_admin: null
-permissions: {  }
+permissions:
+  - 'add own crm_indiv profile'
+  - 'edit own crm_indiv profile'
+  - 'view own crm_indiv profile'
