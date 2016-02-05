@@ -85,8 +85,6 @@ class SimpleCrmTest extends WebTestBase {
         if ($label == 'href') {
           $href = explode('/', $attribute);
           $uid = array_pop($href);
-          $this->verbose($attribute);
-          $this->verbose($uid);
         }
       }
 
@@ -133,9 +131,6 @@ class SimpleCrmTest extends WebTestBase {
           $roles[] = (string) $element;
         }
       }
-
-      $this->verbose($account->td[5]);
-
 
       foreach($account->td[5]->a->attributes() as $label => $attribute) {
         if ($label == 'href') {
@@ -187,7 +182,7 @@ class SimpleCrmTest extends WebTestBase {
 
     // Save a new picture.
     $image = current($this->drupalGetTestFiles('image'));
-    $path = $this->container->get('file_service')->realpath($image->uri);
+    $path = $this->container->get('file_system')->realpath($image->uri);
 
     // Submit the profile add form for an crm_indiv profile.
     $edit = [
@@ -197,7 +192,7 @@ class SimpleCrmTest extends WebTestBase {
       'crm_dob[0][value][month]' => '1',
       'crm_dob[0][value][day]' => '1',
       'crm_gender' => 'female',
-      'files[field_crm_photo_0]' => $path,
+      'files[crm_photo_0]' => $path,
     ];
     $this->drupalPostForm('user/' . $this->indivUser->id() . '/crm_indiv', $edit, t('Save'));
 
@@ -211,7 +206,7 @@ class SimpleCrmTest extends WebTestBase {
     $this->assertFieldByName('crm_dob[0][value][month]', '1');
     $this->assertFieldByName('crm_dob[0][value][day]', '1');
     $this->assertFieldByName('crm_gender', 'female');
-    $this->assertFieldByName('files[field_crm_photo_0]', $path);
+    $this->assertRaw($image->filename);
   }
 
 }

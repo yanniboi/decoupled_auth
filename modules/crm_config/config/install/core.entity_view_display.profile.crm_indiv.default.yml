@@ -17,18 +17,11 @@ id: profile.crm_indiv.default
 targetEntityType: profile
 bundle: crm_indiv
 mode: default
-content:
-  field_crm_photo:
-    weight: 0
-    label: above
-    settings:
-      image_style: ''
-      image_link: ''
-    third_party_settings: {  }
-    type: image
+content: {  }
 hidden:
   crm_address: true
   crm_dob: true
   crm_email: true
   crm_gender: true
   crm_name: true
+  crm_photo: true
