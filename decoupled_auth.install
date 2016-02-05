@@ -79,8 +79,28 @@ function decoupled_auth_install() {
   $manager->updateFieldStorageDefinition($name);
 
   // Add the decoupled filter to the people view.
-  if (\Drupal::moduleHandler()->moduleExists('views')) {
+  if (Drupal::moduleHandler()->moduleExists('views')) {
     decoupled_auth_install_update_user_admin_people_view();
+  }
+
+  // Install the fields for existing profile types.
+  if (Drupal::moduleHandler()->moduleExists('profile')) {
+    $field_manager = Drupal::service('entity_field.manager');
+    $field_manager->clearCachedFieldDefinitions();
+    $definitions = $field_manager->getFieldStorageDefinitions('user');
+    $field_storage_listener = Drupal::service('field_storage_definition.listener');
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      if (isset($definitions[$name])) {
+        $field_storage_listener->onFieldStorageDefinitionCreate($definitions[$name]);
+      }
+    }
+
+    // @todo: Fill out the fields for existing users. This should probably be
+    // batched.
   }
 }
 
@@ -125,8 +145,23 @@ function decoupled_auth_uninstall() {
   $manager->updateFieldStorageDefinition($name);
 
   // Remove the decoupled filter from the people view.
-  if (\Drupal::moduleHandler()->moduleExists('views')) {
+  if (Drupal::moduleHandler()->moduleExists('views')) {
     decoupled_auth_uninstall_update_user_admin_people_view();
+  }
+
+  // Remove the fields for profile types.
+  if (Drupal::moduleHandler()->moduleExists('profile')) {
+    $definitions = Drupal::service('entity.last_installed_schema.repository')->getLastInstalledFieldStorageDefinitions('user');
+    $field_storage_listener = Drupal::service('field_storage_definition.listener');
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      if (isset($definitions[$name])) {
+        $field_storage_listener->onFieldStorageDefinitionDelete($definitions[$name]);
+      }
+    }
   }
 }
 
@@ -134,7 +169,7 @@ function decoupled_auth_uninstall() {
  * Add the decoupled filter to the people view.
  */
 function decoupled_auth_install_update_user_admin_people_view() {
-  $people_view = \Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people');
+  $people_view = Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people');
   $display = &$people_view->getDisplay('default');
   $display['display_options']['filters']['decoupled'] = [
     'id' => 'decoupled',
@@ -187,8 +222,33 @@ function decoupled_auth_install_update_user_admin_people_view() {
  * Remove the decoupled filter from the people view.
  */
 function decoupled_auth_uninstall_update_user_admin_people_view() {
-  $people_view = \Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people');
+  $people_view = Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people');
   $display = &$people_view->getDisplay('default');
   unset($display['display_options']['filters']['decoupled']);
   $people_view->save();
+}
+
+/**
+ * Install the fields for existing profile types.
+ */
+function decoupled_auth_update_8001() {
+  // Install the fields for existing profile types.
+  if (Drupal::moduleHandler()->moduleExists('profile')) {
+    $field_manager = Drupal::service('entity_field.manager');
+    $field_manager->clearCachedFieldDefinitions();
+    $definitions = $field_manager->getFieldStorageDefinitions('user');
+    $field_storage_listener = Drupal::service('field_storage_definition.listener');
+
+    /** @var \Drupal\profile\Entity\ProfileType[] $types */
+    $types = Drupal\profile\Entity\ProfileType::loadMultiple();
+    foreach ($types as $profile_type) {
+      $name = 'profile_' . $profile_type->id();
+      if (isset($definitions[$name])) {
+        $field_storage_listener->onFieldStorageDefinitionCreate($definitions[$name]);
+      }
+    }
+
+    // @todo: Fill out the fields for existing users. This should probably be
+    // batched.
+  }
 }

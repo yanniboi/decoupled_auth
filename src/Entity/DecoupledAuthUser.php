@@ -106,4 +106,20 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
     return $fields;
   }
 
+  /**
+   * Update the fields referencing the given profile types for each user.
+   *
+   * @param string[] $types
+   *   An array of entities.
+   */
+  public function updateProfileFields(array $types) {
+    // Update the field for type.
+    /** @var \Drupal\profile\ProfileStorageInterface $profile_storage */
+    $profile_storage = \Drupal::entityTypeManager()->getStorage('profile');
+    foreach ($types as $type) {
+      $this->{'profile_' . $type} = $profile_storage->loadMultipleByUser($this, $type, PROFILE_ACTIVE);
+    }
+    $this->save();
+  }
+
 }

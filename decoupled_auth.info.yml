@@ -7,3 +7,7 @@ core: 8.x
 
 dependencies:
   - user
+
+test_dependencies:
+  - profile
+
