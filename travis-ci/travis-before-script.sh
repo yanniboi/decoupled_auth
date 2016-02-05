@@ -10,13 +10,7 @@ drupal_ti_ensure_drupal
 mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 git clone --branch 8.x-1.x http://git.drupal.org/project/composer_manager.git --depth 1
-git clone --branch 8.x-1.x http://git.drupal.org/project/profile.git --depth 1
-git clone --branch 8.x-1.x http://git.drupal.org/project/address.git --depth 1
-git clone --branch 8.x-1.x http://git.drupal.org/project/entity.git --depth 1
 php composer_manager/scripts/init.php
-
-#TEMP: Delete broken test from address module.
-rm address/tests/src/Unit/Plugin/Validation/Constraint/CountryConstraintValidatorTest.php
 
 # Ensure the module is linked into the codebase.
 drupal_ti_ensure_module_linked
@@ -26,6 +20,9 @@ cd $DRUPAL_TI_DRUPAL_DIR
 # Update composer dependencies.
 composer drupal-rebuild
 composer update -n --lock --verbose
+
+#TEMP: Delete broken test from address module.
+rm modules/address/tests/src/Unit/Plugin/Validation/Constraint/CountryConstraintValidatorTest.php
 
 # Require that decoupled_auth is always enabled when the user module is enabled.
 git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/decoupled_auth_user_modules_installed.patch
