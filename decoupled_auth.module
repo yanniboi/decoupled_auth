@@ -209,7 +209,7 @@ function decoupled_auth_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInt
     foreach ($types as $profile_type) {
       $name = 'profile_' . $profile_type->id();
       $fields[$name] = BaseFieldDefinition::create('entity_reference')
-        ->setLabel($profile_type->getLabel())
+        ->setLabel($profile_type->label())
         ->setReadOnly(TRUE)
         ->setSetting('target_type', 'profile')
         ->setSetting('handler_settings', ['target_bundles' => [$profile_type->id()]])
