@@ -174,14 +174,12 @@ function decoupled_auth_preprocess_form_element(&$variables) {
 }
 
 /**
- * Implements hook_modules_installed().
- *
- * Apply our changes to the user view if views is installed after decoupled_auth.
+ * Implements hook_ENTITY_TYPE_insert() for view.
  */
-function decoupled_auth_modules_installed($modules) {
-  if (in_array('views', $modules)) {
+function decoupled_auth_view_insert(Drupal\Core\Entity\EntityInterface $entity) {
+  if ($entity->id() == 'user_admin_people') {
     module_load_include('install', 'decoupled_auth', 'decoupled_auth');
-    decoupled_auth_install_update_user_admin_people_view();
+    decoupled_auth_install_update_user_admin_people_view($entity);
   }
 }
 

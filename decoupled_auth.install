@@ -80,7 +80,9 @@ function decoupled_auth_install() {
 
   // Add the decoupled filter to the people view.
   if (Drupal::moduleHandler()->moduleExists('views')) {
-    decoupled_auth_install_update_user_admin_people_view();
+    if ($people_view = $people_view = Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people')) {
+      decoupled_auth_install_update_user_admin_people_view($people_view);
+    }
   }
 
   // Install the fields for existing profile types.
@@ -146,7 +148,9 @@ function decoupled_auth_uninstall() {
 
   // Remove the decoupled filter from the people view.
   if (Drupal::moduleHandler()->moduleExists('views')) {
-    decoupled_auth_uninstall_update_user_admin_people_view();
+    if ($people_view = $people_view = Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people')) {
+      decoupled_auth_uninstall_update_user_admin_people_view($people_view);
+    }
   }
 
   // Remove the fields for profile types.
@@ -168,8 +172,7 @@ function decoupled_auth_uninstall() {
 /**
  * Add the decoupled filter to the people view.
  */
-function decoupled_auth_install_update_user_admin_people_view() {
-  $people_view = Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people');
+function decoupled_auth_install_update_user_admin_people_view($people_view) {
   $display = &$people_view->getDisplay('default');
   $display['display_options']['filters']['decoupled'] = [
     'id' => 'decoupled',
@@ -194,8 +197,8 @@ function decoupled_auth_install_update_user_admin_people_view() {
       'multiple' => FALSE,
       'remember_roles' => [
         'authenticated' => 'authenticated',
-        'anonymous' => 0,
-        'administrator' => 0,
+        'anonymous' => '',
+        'administrator' => '',
       ],
     ],
     'is_grouped' => FALSE,
@@ -221,8 +224,7 @@ function decoupled_auth_install_update_user_admin_people_view() {
 /**
  * Remove the decoupled filter from the people view.
  */
-function decoupled_auth_uninstall_update_user_admin_people_view() {
-  $people_view = Drupal::entityTypeManager()->getStorage('view')->load('user_admin_people');
+function decoupled_auth_uninstall_update_user_admin_people_view($people_view) {
   $display = &$people_view->getDisplay('default');
   unset($display['display_options']['filters']['decoupled']);
   $people_view->save();

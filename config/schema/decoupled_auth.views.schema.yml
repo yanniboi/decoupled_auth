@@ -8,5 +8,5 @@ views.filter.user_decoupled:
   label: 'Decoupled'
 
 views.filter_value.user_decoupled:
-  type: string
+  type: integer
   label: 'Has web account?'
