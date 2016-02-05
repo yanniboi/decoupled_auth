@@ -251,21 +251,20 @@ function decoupled_auth_profile_delete(Drupal\profile\Entity\ProfileInterface $e
  */
 function decoupled_auth_profile_type_insert(Drupal\profile\Entity\ProfileTypeInterface $entity) {
   // Create our new field.
-  $entity_manager = \Drupal::entityManager();
-  $entity_manager->clearCachedDefinitions();
-  $definitions = $entity_manager->getFieldStorageDefinitions('user');
-  $entity_manager->onFieldStorageDefinitionCreate($definitions['profile_' . $entity->id()]);
+  $field_manager = Drupal::service('entity_field.manager');
+  $field_manager->clearCachedFieldDefinitions();
+  $definitions = $field_manager->getFieldStorageDefinitions('user');
+  Drupal::service('field_storage_definition.listener')->onFieldStorageDefinitionCreate($definitions['profile_' . $entity->id()]);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete() for profile_type.
  */
 function decoupled_auth_profile_type_delete(Drupal\profile\Entity\ProfileTypeInterface $entity) {
-  // Create our new field.
-  $entity_manager = \Drupal::entityManager();
-  $definitions = $entity_manager->getLastInstalledFieldStorageDefinitions('user');
+  // Remove our field.
+  $definitions = Drupal::service('entity.last_installed_schema.repository')->getLastInstalledFieldStorageDefinitions('user');
   $name = 'profile_' . $entity->id();
   if (isset($definitions[$name])) {
-    $entity_manager->onFieldStorageDefinitionDelete($definitions[$name]);
+    Drupal::service('field_storage_definition.listener')->onFieldStorageDefinitionDelete($definitions[$name]);
   }
 }
