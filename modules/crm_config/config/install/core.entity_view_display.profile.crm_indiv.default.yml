@@ -7,14 +7,25 @@ dependencies:
     - field.field.profile.crm_indiv.crm_email
     - field.field.profile.crm_indiv.crm_gender
     - field.field.profile.crm_indiv.crm_name
+    - field.field.profile.crm_indiv.crm_photo
     - profile.type.crm_indiv
+  module:
+    - image
 _core:
-  default_config_hash: 2I-lvhoxQGJY96XwLrUnFIHiK94lfuoLNGjqBvclRRQ
+  default_config_hash: oVteP6aET1VrVUyToPz7ML_xzTatXsKiY95vOsJFRg4
 id: profile.crm_indiv.default
 targetEntityType: profile
 bundle: crm_indiv
 mode: default
-content: {  }
+content:
+  field_crm_photo:
+    weight: 0
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
 hidden:
   crm_address: true
   crm_dob: true

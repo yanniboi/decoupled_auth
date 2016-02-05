@@ -3,7 +3,14 @@ description: 'Default configuration for the Simple CRM module.'
 type: module
 core: 8.x
 dependencies:
+  - address
+  - datetime
   - decoupled_auth_crm
+  - decoupled_auth_crm_config
+  - file
+  - image
+  - options
+  - profile
 version: 8.x-1.x
 features:
   required:
@@ -29,6 +36,7 @@ features:
     - field.storage.profile.crm_org_address
     - field.storage.profile.crm_org_email
     - field.storage.profile.crm_org_name
+    - field.storage.profile.crm_photo
     - profile.type.crm_indiv
     - profile.type.crm_org
     - user.role.crm_indiv

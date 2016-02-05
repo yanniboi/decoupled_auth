@@ -2,17 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.profile.crm_logo
-    - profile.type.crm_org
+    - field.storage.profile.crm_photo
+    - profile.type.crm_indiv
   module:
     - image
-_core:
-  default_config_hash: c9M6aY31BFWRXjzpkZVt-XZDaqWksvspO5KfKpdZH_I
-id: profile.crm_org.crm_logo
-field_name: crm_logo
+id: profile.crm_indiv.crm_photo
+field_name: crm_photo
 entity_type: profile
-bundle: crm_org
-label: Logo
+bundle: crm_indiv
+label: Photo
 description: ''
 required: false
 translatable: false

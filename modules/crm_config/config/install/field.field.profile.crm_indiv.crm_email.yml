@@ -5,7 +5,7 @@ dependencies:
     - field.storage.profile.crm_email
     - profile.type.crm_indiv
 _core:
-  default_config_hash: jVN0ck4vkNV0EDIr2JKV03skBCCYJmzBXNjzGMjBY4w
+  default_config_hash: 5KSzr351yoX36IXPoMmmbEeR-rayc2J7VGP8HP9Ghzk
 id: profile.crm_indiv.crm_email
 field_name: crm_email
 entity_type: profile

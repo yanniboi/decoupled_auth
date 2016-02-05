@@ -5,7 +5,7 @@ dependencies:
     - datetime
     - profile
 _core:
-  default_config_hash: obyCurndV-o6O5lEeiHfbXPyUHqlqXHliY0mk9FJ94U
+  default_config_hash: 853RnEg4nb2p86a6UtG2qJWvcNV0qqh2ycyohEOc2_I
 id: profile.crm_dob
 field_name: crm_dob
 entity_type: profile

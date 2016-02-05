@@ -7,7 +7,7 @@ dependencies:
   module:
     - datetime
 _core:
-  default_config_hash: TsFiA-8mn7hTHThQdreQMN0Piw1N5b9MXAAiYb55Bcw
+  default_config_hash: Wx5olhQQev_bQrk0BvHgqGMuJsj85A4Ens1dJ438-K0
 id: profile.crm_indiv.crm_dob
 field_name: crm_dob
 entity_type: profile

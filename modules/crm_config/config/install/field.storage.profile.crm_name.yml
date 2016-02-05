@@ -4,7 +4,7 @@ dependencies:
   module:
     - profile
 _core:
-  default_config_hash: Fjh84dE8XagbjXX7pU4RAKF2qpPL2HuZwyVi_F1UdvY
+  default_config_hash: 8XU2nzPj4Pu6GAsXOkpD-a1YAXYh1OQ8VI-HmJUpqwM
 id: profile.crm_name
 field_name: crm_name
 entity_type: profile

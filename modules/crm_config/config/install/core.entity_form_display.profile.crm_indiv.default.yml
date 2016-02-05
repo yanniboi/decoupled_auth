@@ -7,12 +7,14 @@ dependencies:
     - field.field.profile.crm_indiv.crm_email
     - field.field.profile.crm_indiv.crm_gender
     - field.field.profile.crm_indiv.crm_name
+    - field.field.profile.crm_indiv.crm_photo
     - profile.type.crm_indiv
   module:
     - address
     - datetime
+    - image
 _core:
-  default_config_hash: va7ZHilTi3Ot5Qv04BJaZK-SCKbyFt3Nhrpr8GuQf1c
+  default_config_hash: iyXUFrh3P5xjYxH-8JSk4amkhdQtN8u5PnokKXHlJJM
 id: profile.crm_indiv.default
 targetEntityType: profile
 bundle: crm_indiv
@@ -50,4 +52,11 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_crm_photo:
+    weight: 5
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
 hidden: {  }

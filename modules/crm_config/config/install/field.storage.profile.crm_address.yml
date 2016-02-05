@@ -5,7 +5,7 @@ dependencies:
     - address
     - profile
 _core:
-  default_config_hash: 5mu2y7l_jb7ifHkNwqfLihyDUDT4moYlzCJyZOqmtgQ
+  default_config_hash: YpguLAQv3kCTMtdopS-Uf6tuR9FX1IbLsY4XddcDLdk
 id: profile.crm_address
 field_name: crm_address
 entity_type: profile
