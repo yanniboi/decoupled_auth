@@ -1,0 +1,39 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.profile.crm_org.crm_logo
+    - field.field.profile.crm_org.crm_org_address
+    - field.field.profile.crm_org.crm_org_email
+    - field.field.profile.crm_org.crm_org_name
+    - profile.type.crm_org
+  module:
+    - address
+_core:
+  default_config_hash: 6duRgughWGwm2W_4HZsoo7AqS8fErGadEztoNiEqRMI
+id: profile.crm_org.default
+targetEntityType: profile
+bundle: crm_org
+mode: default
+content:
+  crm_org_address:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: address_default
+  crm_org_email:
+    weight: 1
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+  crm_org_name:
+    weight: 0
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+hidden:
+  crm_logo: true

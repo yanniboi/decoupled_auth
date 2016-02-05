@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: zs6UyrGsWYH-eOFA1ddFGVN5A2_hMvoBQn5QRrRwcSo
+id: crm_indiv
+label: Individual
+weight: 3
+is_admin: null
+permissions:
+  - 'add own crm_indiv profile'
+  - 'edit own crm_indiv profile'
+  - 'view own crm_indiv profile'

@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: FFmjWVydiud5T6XMr3n6h5OB4a4a7imbDLQlMgjWCUg
+id: crm_org
+label: Organisation
+registration: false
+multiple: false
+roles:
+  crm_org: crm_org
+weight: 0

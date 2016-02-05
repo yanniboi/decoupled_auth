@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\Tests\decoupled_auth\Kernel\DecoupledAuthUserEntityTest.
+ * Contains \Drupal\Tests\decoupled_auth\Kernel\UserEntityTest.
  */
 
 namespace Drupal\Tests\decoupled_auth\Kernel;
@@ -18,7 +18,7 @@ use Drupal\simpletest\UserCreationTrait;
  * @group decoupled_auth
  * @see \Drupal\decoupled_auth\Entity\User
  */
-class DecoupledAuthUserEntityTest extends KernelTestBase {
+class UserEntityTest extends KernelTestBase {
   use DecoupledAuthUserCreationTrait;
   use UserCreationTrait;
 

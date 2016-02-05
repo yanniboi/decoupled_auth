@@ -29,14 +29,14 @@ class RegistrationTest extends WebTestBase {
    *
    * @var \Drupal\Core\Config\Config
    */
-  protected $user_config;
+  protected $userConfig;
 
   /**
    * The acquisition settings config.
    *
    * @var \Drupal\Core\Config\Config
    */
-  protected $acquisition_config;
+  protected $acquisitionConfig;
 
   /**
    * {@inheritdoc}
@@ -44,15 +44,15 @@ class RegistrationTest extends WebTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->user_config = $this->config('user.settings');
-    $this->acquisition_config = $this->config('decoupled_auth.settings');
+    $this->userConfig = $this->config('user.settings');
+    $this->acquisitionConfig = $this->config('decoupled_auth.settings');
   }
 
   /**
    * Disable acquisition on registration.
    */
   protected function disableRegistrationAcquisition() {
-    $this->acquisition_config->set('acquisitions.registration', 0)->save();
+    $this->acquisitionConfig->set('acquisitions.registration', 0)->save();
   }
 
   /**
@@ -87,7 +87,6 @@ class RegistrationTest extends WebTestBase {
     $accounts = $user_storage->loadByProperties($property);
     return $accounts;
   }
-
 
   /**
    * Test the standard registration process when there is no existing user.
@@ -143,7 +142,7 @@ class RegistrationTest extends WebTestBase {
     // Set up test environment configuration,
     $this->disableRegistrationAcquisition();
     // Allow all decoupled users to have non-unique emails.
-    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
+    $this->acquisitionConfig->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when the single existing user is decoupled.
     // Expected result: create a new user.
@@ -217,7 +216,7 @@ class RegistrationTest extends WebTestBase {
     // Set up test environment configuration,
     $this->disableRegistrationAcquisition();
     // Allow all decoupled users to have non-unique emails.
-    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
+    $this->acquisitionConfig->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when all existing users are decoupled.
     // Expected result: create a new user.
@@ -253,7 +252,7 @@ class RegistrationTest extends WebTestBase {
    */
   public function testAcquisitionMultiple() {
     // Allow all decoupled users to have non-unique emails.
-    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
+    $this->acquisitionConfig->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when all existing users are decoupled.
     // Expected result: create a new user.
@@ -289,9 +288,9 @@ class RegistrationTest extends WebTestBase {
    */
   public function testAcquisitionMultipleFirst() {
     // Change the site config to acquire the first.
-    $this->acquisition_config->set('acquisitions.behavior_first', 1)->save();
+    $this->acquisitionConfig->set('acquisitions.behavior_first', 1)->save();
     // Allow all decoupled users to have non-unique emails.
-    $this->acquisition_config->set('unique_emails.mode', 'none')->save();
+    $this->acquisitionConfig->set('unique_emails.mode', 'none')->save();
 
     // Test registering a new user when all existing users are decoupled.
     // Expected result: User should acquire the first existing user.
