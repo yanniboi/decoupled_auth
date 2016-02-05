@@ -10,9 +10,8 @@
     }
   ],
   "require": {
-    "drupal/profile": "8.x",
-    "drupal/entity": "8.x",
-    "drupal/address": "8.x"
+    "drupal/profile": "8.1.*",
+    "drupal/address": "8.1.*"
   },
   "autoload": {
     "psr-4": {
