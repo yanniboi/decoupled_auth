@@ -21,11 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides specific access control for the user entity type.
  *
  * @EntityReferenceSelection(
- *   id = "decoupled_auth_user",
- *   label = @Translation("Decoupled User selection"),
+ *   id = "default:user",
+ *   label = @Translation("Decoupled user selection"),
  *   entity_types = {"user"},
- *   group = "decoupled_auth_user",
- *   weight = 10
+ *   group = "default",
+ *   weight = 1
  * )
  */
 class DecoupledUserSelection extends DefaultSelection {
@@ -99,12 +99,6 @@ class DecoupledUserSelection extends DefaultSelection {
       'include_decoupled' => TRUE,
     );
 
-    $form['include_anonymous'] = array(
-      '#type' => 'checkbox',
-      '#title' => $this->t('Include the anonymous user.'),
-      '#default_value' => $selection_handler_settings['include_anonymous'],
-    );
-
     $form['include_decoupled'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Include the decoupled users.'),
@@ -158,7 +152,10 @@ class DecoupledUserSelection extends DefaultSelection {
 
     // The user entity doesn't have a label column.
     if (isset($match)) {
-      $query->condition('name', $match, $match_operator);
+      $or = $query->orConditionGroup();
+      $or->condition('name', $match, $match_operator);
+      $or->condition('mail', $match, $match_operator);
+      $query->condition($or);
     }
 
     // Filter by role.
@@ -215,42 +212,16 @@ class DecoupledUserSelection extends DefaultSelection {
    * {@inheritdoc}
    */
   public function entityQueryAlter(SelectInterface $query) {
-    // Bail out early if we do not need to match the Anonymous user.
+    // Only show decoupled users if requested and user has permission.
     $handler_settings = $this->configuration['handler_settings'];
-    if (isset($handler_settings['include_anonymous']) && !$handler_settings['include_anonymous']) {
-      return;
-    }
-
-    if ($this->currentUser->hasPermission('administer users')) {
-      // In addition, if the user is administrator, we need to make sure to
-      // match the anonymous user, that doesn't actually have a name in the
-      // database.
-      $conditions = &$query->conditions();
-      foreach ($conditions as $key => $condition) {
-        if ($key !== '#conjunction' && is_string($condition['field']) && $condition['field'] === 'users_field_data.name') {
-          // Remove the condition.
-          unset($conditions[$key]);
-
-          // Re-add the condition and a condition on uid = 0 so that we end up
-          // with a query in the form:
-          // WHERE (name LIKE :name) OR (:anonymous_name LIKE :name AND uid = 0)
-          $or = db_or();
-          $or->condition($condition['field'], $condition['value'], $condition['operator']);
-          // Sadly, the Database layer doesn't allow us to build a condition
-          // in the form ':placeholder = :placeholder2', because the 'field'
-          // part of a condition is always escaped.
-          // As a (cheap) workaround, we separately build a condition with no
-          // field, and concatenate the field and the condition separately.
-          $value_part = db_and();
-          $value_part->condition('anonymous_name', $condition['value'], $condition['operator']);
-          $value_part->compile($this->connection, $query);
-          $or->condition(db_and()
-            ->where(str_replace('anonymous_name', ':anonymous_name', (string) $value_part), $value_part->arguments() + array(':anonymous_name' => \Drupal::config('user.settings')->get('anonymous')))
-            ->condition('base_table.uid', 0)
-          );
-          $query->condition($or);
-        }
+    if (isset($handler_settings['include_decoupled']) && $handler_settings['include_decoupled']) {
+      // @TODO Use a better permission that administer users when available.
+      if (!$this->currentUser->hasPermission('administer users')) {
+        $query->isNotNull('name');
       }
+    }
+    else {
+      $query->isNotNull('name');
     }
   }
 
