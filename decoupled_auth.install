@@ -182,7 +182,7 @@ function decoupled_auth_install_update_user_admin_people_view($people_view) {
     'group_type' => 'group',
     'admin_label' => '',
     'operator' => '=',
-    'value' => 0,
+    'value' => '0',
     'group' => 1,
     'exposed' => TRUE,
     'expose' => [
