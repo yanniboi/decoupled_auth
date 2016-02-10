@@ -17,6 +17,7 @@ function decoupled_auth_crm_install() {
   $settings = ['field_name' => 'crm_organisation'];
   $field = Drupal\og\Og::createField('og_group_ref', 'user', 'user', $settings);
 
+  $field->setSetting('handler', 'decoupled_auth_user');
   $handler_settings = [
     'include_decoupled' => 1,
     'filter' => [

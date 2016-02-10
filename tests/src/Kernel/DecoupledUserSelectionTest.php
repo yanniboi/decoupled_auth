@@ -102,7 +102,7 @@ class DecoupledUserSelectionTest extends KernelTestBase {
   protected function setSelectionHandler($filter = FALSE) {
     $options = [
       'target_type' => 'user',
-      'handler' => 'default:user',
+      'handler' => 'decoupled_auth_user',
       'handler_settings' => [
         'include_decoupled' => 1,
       ],

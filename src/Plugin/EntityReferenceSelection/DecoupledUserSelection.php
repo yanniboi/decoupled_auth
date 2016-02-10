@@ -21,11 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides specific access control for the user entity type.
  *
  * @EntityReferenceSelection(
- *   id = "default:user",
+ *   id = "decoupled_auth_user",
  *   label = @Translation("Decoupled user selection"),
  *   entity_types = {"user"},
- *   group = "default",
- *   weight = 1
+ *   group = "decoupled_auth_user",
+ *   weight = 10
  * )
  */
 class DecoupledUserSelection extends DefaultSelection {
