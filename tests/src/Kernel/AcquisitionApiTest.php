@@ -14,7 +14,7 @@ use Drupal\simpletest\UserCreationTrait;
 use Drupal\decoupled_auth\AcquisitionServiceInterface;
 
 /**
- * Tests the Migration entity.
+ * Tests the Acquisition service.
  *
  * @coversDefaultClass \Drupal\decoupled_auth\AcquisitionService
  * @group decoupled_auth
@@ -41,8 +41,7 @@ class AcquisitionApiTest extends KernelTestBase {
   }
 
   /**
-   * Test the standard basic acquisition process of acquiring a user via a
-   * unique email.
+   * Test acquiring a user via a unique email.
    *
    * @covers ::acquire
    */
@@ -110,9 +109,7 @@ class AcquisitionApiTest extends KernelTestBase {
   }
 
   /**
-   * Test the behavior when using the
-   * \Drupal\decoupled_auth\AcquisitionServiceInterface::BEHAVIOR_CREATE
-   * behavior.
+   * Test the create behavior.
    *
    * @covers ::acquire
    */
@@ -239,8 +236,7 @@ class AcquisitionApiTest extends KernelTestBase {
   }
 
   /**
-   * Test that configuration defaults and changes set the correct default
-   * context.
+   * Test the configuration and it's defaults.
    *
    * @covers ::acquire
    */
