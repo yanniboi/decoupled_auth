@@ -19,8 +19,8 @@ cd $DRUPAL_TI_DRUPAL_DIR
 
 # Update composer dependencies.
 export COMPOSER_EXIT_ON_PATCH_FAILURE=1
-composer drupal-rebuild
-composer update -n --lock --verbose
+composer drupal-update
+#composer update -n --lock --verbose
 
 # Check code style using Drupal Coder review.
 composer global require "drupal/coder ^8.2"
