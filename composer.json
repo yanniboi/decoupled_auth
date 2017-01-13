@@ -3,16 +3,6 @@
   "description": "Allow decoupling of Drupal Authentication from Drupal Users.",
   "type": "drupal-module",
   "license": "GPL-2.0+",
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packages.drupal.org/8"
-    }
-  ],
-  "require": {
-    "drupal/profile": "8.1.*",
-    "drupal/address": "8.1.*"
-  },
   "autoload": {
     "psr-4": {
       "Drupal\\decoupled_auth\\": "src"
