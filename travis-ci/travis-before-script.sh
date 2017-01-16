@@ -15,6 +15,7 @@ php composer_manager/scripts/init.php
 cd $DRUPAL_TI_DRUPAL_DIR
 
 # Update composer dependencies.
+export COMPOSER_EXIT_ON_PATCH_FAILURE=1
 composer drupal-rebuild
 composer update -n --lock --verbose
 
