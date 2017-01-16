@@ -9,8 +9,8 @@ drupal_ti_ensure_module_linked
 echo 'Running coder review.'
 composer global require drupal/coder
 /home/travis/.composer/vendor/bin/phpcs --config-set installed_paths /home/travis/.composer/vendor/drupal/coder/coder_sniffer
-cd $DRUPAL_TI_DRUPAL_DIR/modules
-#/home/travis/.composer/vendor/bin/phpcs . -p --standard=Drupal --colors --extensions=php,inc,test,module,install
+cd $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth
+/home/travis/.composer/vendor/bin/phpcs . -p --standard=Drupal --colors --extensions=php,inc,test,module,install
 
 cd $DRUPAL_TI_DRUPAL_DIR/core
 #if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
@@ -18,6 +18,5 @@ cd $DRUPAL_TI_DRUPAL_DIR/core
 #  $DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit
 #else
 echo 'Scheduling decoupled_auth phpunit tests to be run.'
-#$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
-$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --filter testAcquireRoleCondition
+$DRUPAL_TI_DRUPAL_DIR/vendor/bin/phpunit --group decoupled_auth
 #fi
