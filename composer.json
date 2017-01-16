@@ -10,8 +10,8 @@
     }
   ],
   "require": {
-    "drupal/profile": "8.1.*",
-    "drupal/address": "8.1.*"
+    "drupal/profile": "~1.0",
+    "drupal/address": "~1.0"
   },
   "require-dev": {
     "drupal/coder": "^8.2"
@@ -27,3 +27,4 @@
     }
   }
 }
+
