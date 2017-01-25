@@ -32,7 +32,7 @@ class AcquisitionService implements AcquisitionServiceInterface {
    * \Drupal\decoupled_auth\AcquisitionServiceInterface::FAIL_* constants, or
    * NULL if there is no failure code.
    *
-   * @var int|NULL
+   * @var int|null
    */
   protected $failCode;
 
@@ -97,12 +97,12 @@ class AcquisitionService implements AcquisitionServiceInterface {
     // If there's no match and we are preferring coupled users, run again
     // without that behavior.
     if (!$user && $this->context['behavior'] & self::BEHAVIOR_PREFER_COUPLED) {
-      // Build a new context so we can remove the prefer coupled behavior.
+      // Build a new context so we can remove the prefer coupled behavior. We
+      // don't exclude coupled from the query as it may have failed due to
+      // multiple matches.
       $new_context = $this->context;
       $new_context['behavior'] -= self::BEHAVIOR_PREFER_COUPLED;
 
-      // We don't exclude coupled from the query as it may have failed due to
-      // multiple matches.
       // Re-run the find match with our new context.
       $user = $this->findMatch($values, $new_context);
     }

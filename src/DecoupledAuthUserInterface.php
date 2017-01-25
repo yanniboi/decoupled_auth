@@ -31,23 +31,19 @@ interface DecoupledAuthUserInterface extends UserInterface {
    * Check whether this user is coupled.
    *
    * @return bool
-   *   Whether this use is coupled.
+   *   Whether this user is coupled.
    */
   public function isCoupled();
 
   /**
    * Set this user to the coupled state.
    *
-   * @return DecoupledAuthUserInterface
-   *   The user being coupled.
+   * @return static
    */
   public function couple();
 
   /**
    * Calculate the decoupled state of this user.
-   *
-   * @return bool
-   *   The decoupled state of the user.
    */
   public function calculateDecoupled();
 

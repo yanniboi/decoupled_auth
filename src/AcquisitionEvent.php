@@ -11,7 +11,7 @@ use Drupal\decoupled_auth\Entity\DecoupledAuthUser;
 class AcquisitionEvent extends Event {
 
   /**
-   * Name of the event fired prior to attempting to find a user match.
+   * Name of the event fired prior to attempting an acquisition.
    *
    * This event allows modules to make changes to the matched values and context
    * used for the acquisition attempt.
@@ -25,7 +25,7 @@ class AcquisitionEvent extends Event {
   const PRE = 'decoupled_auth.pre_acquire';
 
   /**
-   * Name of the event fired after attempting to find a user match.
+   * Name of the event fired after attempting an acquisition.
    *
    * This event allows modules to react to an acquisition success for failure.
    *
@@ -54,7 +54,7 @@ class AcquisitionEvent extends Event {
   /**
    * The acquired user, if any.
    *
-   * @var \Drupal\decoupled_auth\Entity\DecoupledAuthUser|NULL
+   * @var \Drupal\decoupled_auth\Entity\DecoupledAuthUser|null
    */
   protected $user;
 
@@ -68,7 +68,7 @@ class AcquisitionEvent extends Event {
   }
 
   /**
-   * Returns the values by reference.
+   * Returns the acquisition values by reference.
    *
    * @return array
    *   The values to match on.
@@ -78,7 +78,7 @@ class AcquisitionEvent extends Event {
   }
 
   /**
-   * Returns the context by reference.
+   * Returns the acquisition context by reference.
    *
    * @return array
    *   The context for the acquisition.
@@ -88,7 +88,7 @@ class AcquisitionEvent extends Event {
   }
 
   /**
-   * Return the name, if any, of the acquisition attempt.
+   * Returns the name, if any, of the acquisition context.
    *
    * @return string|null
    *   The acquired context name or NULL if none provided.
@@ -98,7 +98,7 @@ class AcquisitionEvent extends Event {
   }
 
   /**
-   * Returns the user, if any.
+   * Returns the acquired user, if any.
    *
    * @return \Drupal\decoupled_auth\Entity\DecoupledAuthUser|null
    *   The acquired user or NULL if none found.

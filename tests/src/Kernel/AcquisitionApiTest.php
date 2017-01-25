@@ -49,7 +49,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Run our acquisition.
     $values = ['mail' => $user->getEmail()];
-    $acquired_user = $acquisition->acquire($values, ['name' => 'decoupled_auth_AcquisitionTest'], $method);
+    $acquired_user = $acquisition->acquire($values, ['name' => 'decoupled_auth_acquisition_test'], $method);
 
     // Check the result.
     if (!$acquired_user) {
@@ -79,7 +79,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // First try without the default behaviors - we expect $user_1 to be
     // acquired as it is the only coupled user.
-    $acquired_user = $acquisition->acquire($values, ['name' => 'decoupled_auth_AcquisitionTest'], $method);
+    $acquired_user = $acquisition->acquire($values, ['name' => 'decoupled_auth_acquisition_test'], $method);
     if (!$acquired_user) {
       $this->fail('Failed to acquire user.');
     }
@@ -116,7 +116,7 @@ class AcquisitionApiTest extends KernelTestBase {
     $values = ['mail' => $email];
 
     // Check that user is created by default.
-    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $context = ['name' => 'decoupled_auth_acquisition_test'];
     $acquired_user_1 = $acquisition->acquire($values, $context, $method);
 
     if (!$acquired_user_1) {
@@ -154,7 +154,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Test acquisition with no status provided.
     $values = ['mail' => $email];
-    $context = ['name' => 'decoupled_auth_AcquisitionTest', 'behavior' => NULL];
+    $context = ['name' => 'decoupled_auth_acquisition_test', 'behavior' => NULL];
     $acquired_user = $acquisition->acquire($values, $context, $method);
 
     if (!$acquired_user) {
@@ -208,7 +208,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Test acquisition with no administrator users.
     $values = ['roles' => $rid];
-    $context = ['name' => 'decoupled_auth_AcquisitionTest', 'behavior' => NULL];
+    $context = ['name' => 'decoupled_auth_acquisition_test', 'behavior' => NULL];
     $acquired_user = $acquisition->acquire($values, $context, $method);
 
     $this->assertNull($acquired_user, 'No user acquired.');
@@ -269,7 +269,7 @@ class AcquisitionApiTest extends KernelTestBase {
     /** @var \Drupal\decoupled_auth\AcquisitionServiceInterface $acquisition */
     $acquisition = $this->container->get('decoupled_auth.acquisition');
 
-    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $context = ['name' => 'decoupled_auth_acquisition_test'];
     $acquisition->acquire([], $context, $method);
     $new_context = $acquisition->getContext();
 
@@ -292,7 +292,7 @@ class AcquisitionApiTest extends KernelTestBase {
 
     // Run without expecting a query alter (to verify the following tests are
     // true failures to acquire).
-    $context = ['name' => 'decoupled_auth_AcquisitionTest'];
+    $context = ['name' => 'decoupled_auth_acquisition_test'];
     $acquired_user = $acquisition->acquire(['mail' => $user->getEmail()], $context, $method);
     if (!$acquired_user) {
       $this->fail('Failed to acquire user.');
