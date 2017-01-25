@@ -62,7 +62,7 @@ class UniqueEmailTest extends KernelTestBase {
    *   \Drupal\decoupled_auth\DecoupledAuthConfig::UNIQUE_EMAILS_MODE_WITHOUT_ROLE
    *   mode.
    */
-  protected function setUniqueEmailsConfig($mode, $roles = []) {
+  protected function setUniqueEmailsConfig($mode, array $roles = []) {
     $this->config('decoupled_auth.settings')
       ->set('unique_emails.mode', $mode)
       ->set('unique_emails.roles', $roles)

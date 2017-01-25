@@ -20,10 +20,7 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Subscriber event.
-   *
-   * This method is called whenever the AcquisitionEvent::PRE event is
-   * dispatched.
+   * This method is called when the AcquisitionEvent::PRE event is dispatched.
    *
    * @param AcquisitionEvent $event
    *   The acquisition event.
@@ -34,10 +31,7 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Subscriber event.
-   *
-   * This method is called whenever the AcquisitionEvent::POST event is
-   * dispatched.
+   * This method is called when the AcquisitionEvent::POST event is dispatched.
    *
    * @param AcquisitionEvent $event
    *   The acquisition event.

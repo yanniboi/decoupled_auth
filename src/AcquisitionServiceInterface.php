@@ -21,7 +21,8 @@ interface AcquisitionServiceInterface {
   /**
    * Behavior bit flag to indicate we should create a new user.
    *
-   * Applies if there is no match.
+   * Applies if there is no match or there are multiple potential matches
+   * without self::BEHAVIOR_FIRST enabled.
    */
   const BEHAVIOR_CREATE = 0x2;
 
