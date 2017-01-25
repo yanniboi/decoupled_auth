@@ -89,7 +89,7 @@ class UserProfileFieldTest extends KernelTestBase {
    *   Whether the profile should be created as active.
    *
    * @return \Drupal\profile\Entity\ProfileInterface
-   *   Fully loaded profile entity.
+   *   The saved profile entity.
    */
   protected function createProfile($type, UserInterface $user, $active) {
     /** @var \Drupal\profile\Entity\ProfileInterface $profile */
@@ -102,7 +102,7 @@ class UserProfileFieldTest extends KernelTestBase {
   }
 
   /**
-   * Test that the profile field gets created and deleted correctly.
+   * Test that the profile field gets created and deleted correctly via the API.
    */
   public function testFieldCreateDeleteApi() {
     $this->installProfile();

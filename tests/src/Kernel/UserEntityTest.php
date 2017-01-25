@@ -14,6 +14,7 @@ use Drupal\simpletest\UserCreationTrait;
  * @see \Drupal\decoupled_auth\Entity\User
  */
 class UserEntityTest extends KernelTestBase {
+
   use DecoupledAuthUserCreationTrait;
   use UserCreationTrait;
 

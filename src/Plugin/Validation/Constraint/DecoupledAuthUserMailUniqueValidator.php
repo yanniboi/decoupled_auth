@@ -11,8 +11,8 @@ use Drupal\decoupled_auth\DecoupledAuthConfig;
 /**
  * Checks if a user's email address is unique on the site.
  *
- * Applies within coupled users and decoupled users of specific roles
- * (if configured).
+ * Applies within coupled users and decoupled users of specific roles (if
+ * configured).
  *
  * @see \Drupal\Core\Validation\Plugin\Validation\Constraint\UniqueFieldValueValidator
  */
