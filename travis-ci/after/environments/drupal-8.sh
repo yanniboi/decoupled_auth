@@ -37,7 +37,8 @@ function drupal_ti_ensure_module_linked() {
 
 	composer config "repositories.$DRUPAL_TI_MODULE_NAME" path $TRAVIS_BUILD_DIR
 	composer config repositories.drupal composer https://packages.drupal.org/8
-	composer require "drupal/$DRUPAL_TI_MODULE_NAME:*"
+    cat composer.json
+    composer require "drupal/$DRUPAL_TI_MODULE_NAME:*"
 
 	cat composer.json
 
