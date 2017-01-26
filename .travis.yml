@@ -46,7 +46,7 @@ env:
     #- DRUPAL_TI_DEBUG_FILE_OUTPUT="all"
 
   matrix:
-    #- We run phpunit manually in ./travis-ci/travis-script.sh
+    # @todo Move webtests to phpunit tests, then remove simpletest runner.
     - DRUPAL_TI_RUNNERS="phpunit-core"
     - DRUPAL_TI_RUNNERS="simpletest"
 
