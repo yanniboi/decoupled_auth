@@ -204,7 +204,7 @@ class AcquisitionApiTest extends KernelTestBase {
     $acquisition = $this->container->get('decoupled_auth.acquisition');
 
     $user = $this->createUser();
-    $rid = 'administrator';
+    $rid = $this->createRole([]);
 
     // Test acquisition with no administrator users.
     $values = ['roles' => $rid];

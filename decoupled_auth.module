@@ -12,6 +12,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\profile\Entity\ProfileType;
 use Drupal\profile\Entity\ProfileInterface;
+use Drupal\profile\Entity\ProfileTypeInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 
 /**
