@@ -37,7 +37,7 @@ function drupal_ti_ensure_module_linked() {
 
 	composer config "repositories.$DRUPAL_TI_MODULE_NAME" path $TRAVIS_BUILD_DIR
 	composer config repositories.drupal composer https://packages.drupal.org/8
-	composer require drupal/$DRUPAL_TI_MODULE_NAME *
+	composer require "drupal/$DRUPAL_TI_MODULE_NAME:*"
 
 	cat composer.json
 
@@ -47,6 +47,7 @@ function drupal_ti_ensure_module_linked() {
 	# Point module into the drupal installation.
 	ln -sf "$MODULE_DIR" "$DRUPAL_TI_DRUPAL_DIR/modules/$DRUPAL_TI_MODULE_NAME"
 
+	ls -al $DRUPAL_TI_DRUPAL_DIR/modules
 	ls -al $DRUPAL_TI_DRUPAL_DIR/modules/$DRUPAL_TI_MODULE_NAME
 	ls -al $DRUPAL_TI_DRUPAL_DIR/modules/$DRUPAL_TI_MODULE_NAME/travis-ci
 
