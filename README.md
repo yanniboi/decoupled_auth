@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/FreelyGive/decoupled_auth.png)](https://travis-ci.org/FreelyGive/decoupled_auth)
+
 # Decoupled User Auth
 
 This project is on Drupal.org here: https://www.drupal.org/project/decoupled_auth
