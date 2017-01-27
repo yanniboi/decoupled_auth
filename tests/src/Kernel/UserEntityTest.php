@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\decoupled_auth\Kernel\UserEntityTest.
- */
-
 namespace Drupal\Tests\decoupled_auth\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
@@ -19,6 +14,7 @@ use Drupal\simpletest\UserCreationTrait;
  * @see \Drupal\decoupled_auth\Entity\User
  */
 class UserEntityTest extends KernelTestBase {
+
   use DecoupledAuthUserCreationTrait;
   use UserCreationTrait;
 
@@ -58,14 +54,15 @@ class UserEntityTest extends KernelTestBase {
    * Get validation messages from unsaved user object.
    *
    * @param \Drupal\decoupled_auth\Entity\DecoupledAuthUser $user
+   *   User entity being validated.
    *
    * @return array
-   *  Array of message template strings.
+   *   Array of message template strings.
    */
   protected function getUserValidation(DecoupledAuthUser $user) {
     $violations = $user->validate();
     $messages = [];
-    foreach($violations as $violation) {
+    foreach ($violations as $violation) {
       $messages[] = $violation->getMessageTemplate();
     }
     return $messages;

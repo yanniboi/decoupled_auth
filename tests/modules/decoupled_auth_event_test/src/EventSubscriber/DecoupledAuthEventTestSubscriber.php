@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\decoupled_auth_event_test\EventSubscriber\DecoupledAuthEventTestSubscriber.
- */
-
 namespace Drupal\decoupled_auth_event_test\EventSubscriber;
 
 use Drupal\decoupled_auth\AcquisitionEvent;
@@ -18,17 +13,17 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  static function getSubscribedEvents() {
+  public static function getSubscribedEvents() {
     $events[AcquisitionEvent::PRE][] = array('setTestContextPre');
     $events[AcquisitionEvent::POST][] = array('setTestContextPost');
     return $events;
   }
 
   /**
-   * This method is called whenever the AcquisitionEvent::PRE event is
-   * dispatched.
+   * This method is called when the AcquisitionEvent::PRE event is dispatched.
    *
    * @param AcquisitionEvent $event
+   *   The acquisition event.
    */
   public function setTestContextPre(AcquisitionEvent $event) {
     $context = &$event->getContext();
@@ -36,10 +31,10 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * This method is called whenever the AcquisitionEvent::POST event is
-   * dispatched.
+   * This method is called when the AcquisitionEvent::POST event is dispatched.
    *
    * @param AcquisitionEvent $event
+   *   The acquisition event.
    */
   public function setTestContextPost(AcquisitionEvent $event) {
     $context = &$event->getContext();
