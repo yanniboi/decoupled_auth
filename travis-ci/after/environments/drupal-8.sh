@@ -35,15 +35,9 @@ function drupal_ti_ensure_module_linked() {
 		return
 	fi
 
+	composer config repositories.$DRUPAL_TI_MODULE_NAME path $TRAVIS_BUILD_DIR
 	composer config repositories.drupal composer https://packages.drupal.org/8
-	composer config "repositories.$DRUPAL_TI_MODULE_NAME" path $TRAVIS_BUILD_DIR
-    composer require "drupal/$DRUPAL_TI_MODULE_NAME:*"
-
-    # Path repo conflicts with drupal.org repo.
-    # @todo Find a better way of using correct commit of module.
-	rm -rf "$DRUPAL_TI_DRUPAL_DIR/modules/$DRUPAL_TI_MODULE_NAME"
-	MODULE_DIR=$(cd "$TRAVIS_BUILD_DIR"; pwd)
-	ln -sf "$MODULE_DIR" "$DRUPAL_TI_DRUPAL_DIR/modules/$DRUPAL_TI_MODULE_NAME"
+	composer require drupal/$DRUPAL_TI_MODULE_NAME *@dev
 
 	git apply -v $DRUPAL_TI_DRUPAL_DIR/modules/decoupled_auth/travis-ci/merging_data_types-2693081-15_0.patch
 
