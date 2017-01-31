@@ -112,7 +112,7 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
     /** @var \Drupal\profile\ProfileStorageInterface $profile_storage */
     $profile_storage = \Drupal::entityTypeManager()->getStorage('profile');
     foreach ($types as $type) {
-      $this->{'profile_' . $type} = $profile_storage->loadMultipleByUser($this, $type, PROFILE_ACTIVE);
+      $this->{'profile_' . $type} = $profile_storage->loadMultipleByUser($this, $type, TRUE);
     }
     $this->save();
   }
