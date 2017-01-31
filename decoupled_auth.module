@@ -234,21 +234,21 @@ function decoupled_auth_entity_base_field_info(EntityTypeInterface $entity_type)
  * Implements hook_ENTITY_TYPE_insert() for profile.
  */
 function decoupled_auth_profile_insert(ProfileInterface $entity) {
-  $entity->getOwner()->updateProfileFields([$entity->getType()]);
+  $entity->getOwner()->updateProfileFields([$entity->bundle()]);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update() for profile.
  */
 function decoupled_auth_profile_update(ProfileInterface $entity) {
-  $entity->getOwner()->updateProfileFields([$entity->getType()]);
+  $entity->getOwner()->updateProfileFields([$entity->bundle()]);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete() for profile.
  */
 function decoupled_auth_profile_delete(ProfileInterface $entity) {
-  $entity->getOwner()->updateProfileFields([$entity->getType()]);
+  $entity->getOwner()->updateProfileFields([$entity->bundle()]);
 }
 
 /**
