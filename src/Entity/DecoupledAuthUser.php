@@ -23,6 +23,16 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
   /**
    * {@inheritdoc}
    */
+  public function __construct(array $values, $entity_type, $bundle, array $translations) {
+    parent::__construct($values, $entity_type, $bundle, $translations);
+
+    // Constructor values don't trigger onChange, so do it manually.
+    $this->calculateDecoupled();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function postLoad(EntityStorageInterface $storage, array &$entities) {
     /* @var $entities DecoupledAuthUser[] */
     parent::postLoad($storage, $entities);
