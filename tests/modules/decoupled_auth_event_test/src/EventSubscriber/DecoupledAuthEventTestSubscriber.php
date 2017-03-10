@@ -22,7 +22,7 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
   /**
    * This method is called when the AcquisitionEvent::PRE event is dispatched.
    *
-   * @param AcquisitionEvent $event
+   * @param \Drupal\decoupled_auth\AcquisitionEvent $event
    *   The acquisition event.
    */
   public function setTestContextPre(AcquisitionEvent $event) {
@@ -33,7 +33,7 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
   /**
    * This method is called when the AcquisitionEvent::POST event is dispatched.
    *
-   * @param AcquisitionEvent $event
+   * @param \Drupal\decoupled_auth\AcquisitionEvent $event
    *   The acquisition event.
    */
   public function setTestContextPost(AcquisitionEvent $event) {
