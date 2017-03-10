@@ -233,4 +233,5 @@ class UserEntityTest extends KernelTestBase {
     $this->assertFalse($user->isAuthenticated());
     $this->assertTrue($user->isAnonymous());
   }
+
 }

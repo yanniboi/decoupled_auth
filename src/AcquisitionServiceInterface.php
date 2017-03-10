@@ -57,6 +57,8 @@ interface AcquisitionServiceInterface {
   /**
    * Constructs an AcquisitionServiceInterface object.
    *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
