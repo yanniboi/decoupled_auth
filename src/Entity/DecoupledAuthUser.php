@@ -23,7 +23,7 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $values, $entity_type, $bundle, array $translations) {
+  public function __construct(array $values, $entity_type, $bundle = FALSE, $translations = array()) {
     parent::__construct($values, $entity_type, $bundle, $translations);
 
     // Constructor values don't trigger onChange, so do it manually.
