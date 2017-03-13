@@ -1,4 +1,6 @@
-[![Status](https://travis-ci.org/FreelyGive/decoupled_auth.png)](https://travis-ci.org/FreelyGive/decoupled_auth)
+[![Build Status][build_status_image]][buildstatuslink]
+[build_status_image]: https://travis-ci.org/FreelyGive/decoupled_auth.png
+[buildstatuslink]: https://travis-ci.org/FreelyGive/decoupled_auth
 
 # Decoupled User Authentication
 
