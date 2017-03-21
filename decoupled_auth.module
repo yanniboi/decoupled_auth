@@ -123,7 +123,7 @@ function decoupled_auth_form_user_register_form_entity_build($entity_type, $enti
     $entity->enforceIsNew(FALSE);
 
     // Copy our values over.
-    $override = ['uid', 'uuid', 'roles', 'created'];
+    $override = ['uid', 'uuid', 'created'];
     foreach (array_keys($entity->getFields()) as $key) {
       // If we have a value on the acquired user but not on the new user we'll
       // copy it over, with the exception of uid, uuid and roles which we'll
@@ -131,6 +131,11 @@ function decoupled_auth_form_user_register_form_entity_build($entity_type, $enti
       if (in_array($key, $override) || empty($entity->{$key}->value)) {
         $entity->{$key} = $acquired_user->{$key}->value;
       }
+    }
+
+    // Add in any roles.
+    foreach ($acquired_user->getRoles(TRUE) as $role) {
+      $entity->addRole($role);
     }
   }
 }
