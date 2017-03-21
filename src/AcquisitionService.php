@@ -145,9 +145,6 @@ class AcquisitionService implements AcquisitionServiceInterface {
       $query->addTag('decoupled_auth_acquisition__' . $context['name']);
     }
 
-    // By default, we want to exclude blocked users.
-    $values += ['status' => 1];
-
     // Add our conditions to the query.
     foreach ($values as $key => $value) {
       // Don't do anything if the value is NULL so that we can skip the default
