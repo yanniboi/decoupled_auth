@@ -13,4 +13,3 @@ dependencies:
   - datetime
   - options
   - image
-  - decoupled_auth_crm_config
