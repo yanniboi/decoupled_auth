@@ -270,6 +270,8 @@ function decoupled_auth_profile_type_insert(ProfileTypeInterface $entity) {
   $field_manager->clearCachedFieldDefinitions();
   $definitions = $field_manager->getFieldStorageDefinitions('user');
   Drupal::service('field_storage_definition.listener')->onFieldStorageDefinitionCreate($definitions['profile_' . $entity->id()]);
+  // @todo Remove this once profile issue is cleared [#2875157].
+  Drupal::service('entity_type.manager')->clearCachedDefinitions();
 }
 
 /**
