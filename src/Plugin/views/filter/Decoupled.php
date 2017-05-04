@@ -34,7 +34,7 @@ class Decoupled extends FilterPluginBase {
    */
   public function getValueOptions() {
     // Provide value options for has web account, Yes or No.
-    $this->valueOptions = array(1 => $this->t('No'), 0 => $this->t('Yes'));
+    $this->valueOptions = [1 => $this->t('No'), 0 => $this->t('Yes')];
   }
 
   /**
@@ -54,12 +54,12 @@ class Decoupled extends FilterPluginBase {
       $filter_form_type = 'radios';
     }
 
-    $form['value'] = array(
+    $form['value'] = [
       '#type' => $filter_form_type,
       '#title' => $this->value_value,
       '#options' => $this->valueOptions,
       '#default_value' => $this->value,
-    );
+    ];
 
     if (!empty($this->options['exposed'])) {
       $identifier = $this->options['expose']['identifier'];
@@ -70,7 +70,7 @@ class Decoupled extends FilterPluginBase {
       }
       // If we're configuring an exposed filter, add an - Any - option.
       if (!$exposed || empty($this->options['expose']['required'])) {
-        $form['value']['#options'] = array('All' => $this->t('- Any -')) + $form['value']['#options'];
+        $form['value']['#options'] = ['All' => $this->t('- Any -')] + $form['value']['#options'];
       }
     }
   }

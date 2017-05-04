@@ -58,7 +58,7 @@ function decoupled_auth_install() {
   $constraints = $name->getConstraints();
   unset($constraints['UserName']);
   unset($constraints['NotNull']);
-  $constraints['DecoupledAuthUserName'] = array();
+  $constraints['DecoupledAuthUserName'] = [];
   $name
     ->setRequired(FALSE)
     ->setConstraints($constraints);
@@ -69,11 +69,11 @@ function decoupled_auth_install() {
 
   // Swap to our own unique constraint for mail.
   unset($constraints['UserMailUnique']);
-  $constraints['DecoupledAuthUserMailUnique'] = array();
+  $constraints['DecoupledAuthUserMailUnique'] = [];
 
   // Swap to our own required constraint for mail.
   unset($constraints['UserMailRequired']);
-  $constraints['DecoupledAuthUserMailRequired'] = array();
+  $constraints['DecoupledAuthUserMailRequired'] = [];
 
   $mail->setConstraints($constraints);
 
@@ -125,8 +125,8 @@ function decoupled_auth_uninstall() {
   $name = $manager->getFieldStorageDefinition('name', 'user');
   $constraints = $name->getConstraints();
   unset($constraints['DecoupledAuthUserName']);
-  $constraints['UserName'] = array();
-  $constraints['NotNull'] = array();
+  $constraints['UserName'] = [];
+  $constraints['NotNull'] = [];
   $name
     ->setRequired(FALSE)
     ->setConstraints($constraints);
@@ -137,11 +137,11 @@ function decoupled_auth_uninstall() {
 
   // Swap back the unique constraint.
   unset($constraints['DecoupledAuthUserMailUnique']);
-  $constraints['UserMailUnique'] = array();
+  $constraints['UserMailUnique'] = [];
 
   // Swap back the required constraint.
   unset($constraints['DecoupledAuthUserMailRequired']);
-  $constraints['UserMailRequired'] = array();
+  $constraints['UserMailRequired'] = [];
 
   $mail->setConstraints($constraints);
 

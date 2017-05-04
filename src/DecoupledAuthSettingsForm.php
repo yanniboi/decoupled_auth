@@ -68,7 +68,7 @@ class DecoupledAuthSettingsForm extends ConfigFormBase {
       '#states' => ['visible' => ['input[name="acquisitions[registration]"' => ['value' => '1']]],
     ];
 
-    $roles = array_map(array('\Drupal\Component\Utility\Html', 'escape'), user_role_names(TRUE));
+    $roles = array_map(['\Drupal\Component\Utility\Html', 'escape'], user_role_names(TRUE));
     $form['acquisitions']['protected_roles'] = [
       '#type' => 'select',
       '#multiple' => TRUE,
