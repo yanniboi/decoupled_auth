@@ -61,7 +61,7 @@ class RegistrationTest extends WebTestBase {
    *   Array of information that was used to create user.
    */
   protected function registerNewUser($name = '', $mail_prefix = '') {
-    $edit = array();
+    $edit = [];
     $edit['name'] = $name ? $name : $this->randomMachineName();
     $edit['mail'] = $mail_prefix ? $mail_prefix . '@example.com' : $edit['name'] . '@example.com';
 
@@ -165,7 +165,7 @@ class RegistrationTest extends WebTestBase {
     // Test registering a new user when the single existing user is coupled.
     // Expected result: fail with validation error.
     $name = $email_prefix = $this->randomMachineName();
-    $this->drupalCreateUser(array(), $name);
+    $this->drupalCreateUser([], $name);
     $this->registerNewUser('', $email_prefix);
     $this->assertText('The email address ' . $email_prefix . '@example.com is already taken.');
   }
@@ -198,7 +198,7 @@ class RegistrationTest extends WebTestBase {
     // Test registering a new user when the single existing user is coupled.
     // Expected result: fail with validation error.
     $name = $email_prefix = $this->randomMachineName();
-    $this->drupalCreateUser(array(), $name);
+    $this->drupalCreateUser([], $name);
     $this->registerNewUser('', $email_prefix);
     $this->assertText('The email address ' . $email_prefix . '@example.com is already taken.');
   }

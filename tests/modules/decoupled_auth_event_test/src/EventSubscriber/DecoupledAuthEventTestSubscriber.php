@@ -14,8 +14,8 @@ class DecoupledAuthEventTestSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[AcquisitionEvent::PRE][] = array('setTestContextPre');
-    $events[AcquisitionEvent::POST][] = array('setTestContextPost');
+    $events[AcquisitionEvent::PRE][] = ['setTestContextPre'];
+    $events[AcquisitionEvent::POST][] = ['setTestContextPost'];
     return $events;
   }
 

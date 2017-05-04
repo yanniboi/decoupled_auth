@@ -23,7 +23,7 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $values, $entity_type, $bundle = FALSE, $translations = array()) {
+  public function __construct(array $values, $entity_type, $bundle = FALSE, $translations = []) {
     parent::__construct($values, $entity_type, $bundle, $translations);
 
     // Constructor values don't trigger onChange, so do it manually.
@@ -130,7 +130,7 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
     $constraints = $fields['name']->getConstraints();
     unset($constraints['UserName']);
     unset($constraints['NotNull']);
-    $constraints['DecoupledAuthUserName'] = array();
+    $constraints['DecoupledAuthUserName'] = [];
     $fields['name']
       ->setRequired(FALSE)
       ->setConstraints($constraints);
@@ -140,11 +140,11 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
 
     // Swap to our own unique constraint for mail.
     unset($constraints['UserMailUnique']);
-    $constraints['DecoupledAuthUserMailUnique'] = array();
+    $constraints['DecoupledAuthUserMailUnique'] = [];
 
     // Swap to our own required constraint for mail.
     unset($constraints['UserMailRequired']);
-    $constraints['DecoupledAuthUserMailRequired'] = array();
+    $constraints['DecoupledAuthUserMailRequired'] = [];
 
     $fields['mail']->setConstraints($constraints);
 

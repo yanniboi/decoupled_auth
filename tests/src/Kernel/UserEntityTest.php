@@ -81,7 +81,7 @@ class UserEntityTest extends KernelTestBase {
     $this->assertEquals('Drupal\decoupled_auth\DecoupledAuthUserStorageSchema', $user_type->getHandlerClass('storage_schema'), 'User storage schema class is decoupled_auth class.');
 
     // Uninstall decoupled auth to check module removal.
-    $this->disableModules(array('decoupled_auth'));
+    $this->disableModules(['decoupled_auth']);
 
     $manager = $this->container->get('entity_type.manager');
     $user_type = $manager->getDefinition('user');

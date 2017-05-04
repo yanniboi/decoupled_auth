@@ -9,14 +9,14 @@
  * Implements hook_views_data_alter().
  */
 function decoupled_auth_views_data_alter(&$data) {
-  $data['users']['decoupled'] = array(
+  $data['users']['decoupled'] = [
     'title' => t('Decoupled'),
     'help' => t('Whether this user is decoupled or not.'),
-    'field' => array(
+    'field' => [
       'id' => 'user_decoupled',
-    ),
-    'filter' => array(
+    ],
+    'filter' => [
       'id' => 'user_decoupled',
-    ),
-  );
+    ],
+  ];
 }
