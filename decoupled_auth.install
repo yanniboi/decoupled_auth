@@ -58,7 +58,6 @@ function decoupled_auth_install() {
   $constraints = $name->getConstraints();
   unset($constraints['UserName']);
   unset($constraints['NotNull']);
-  $constraints['DecoupledAuthUserName'] = [];
   $name
     ->setRequired(FALSE)
     ->setConstraints($constraints);
@@ -124,7 +123,6 @@ function decoupled_auth_uninstall() {
   // Revert our name changes.
   $name = $manager->getFieldStorageDefinition('name', 'user');
   $constraints = $name->getConstraints();
-  unset($constraints['DecoupledAuthUserName']);
   $constraints['UserName'] = [];
   $constraints['NotNull'] = [];
   $name

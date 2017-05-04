@@ -130,7 +130,6 @@ class DecoupledAuthUser extends User implements DecoupledAuthUserInterface {
     $constraints = $fields['name']->getConstraints();
     unset($constraints['UserName']);
     unset($constraints['NotNull']);
-    $constraints['DecoupledAuthUserName'] = [];
     $fields['name']
       ->setRequired(FALSE)
       ->setConstraints($constraints);

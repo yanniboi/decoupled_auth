@@ -157,11 +157,12 @@ class AcquisitionApiTest extends KernelTestBase {
     $context = ['name' => 'decoupled_auth_acquisition_test', 'behavior' => NULL];
     $acquired_user = $acquisition->acquire($values, $context, $method);
 
-    if (!$acquired_user) {
-      $this->fail('Failed to create user.');
+    if ($acquired_user) {
+      $this->fail('Found one user when should have been multiple.');
     }
     else {
-      $this->assertEquals($active_user->id(), $acquired_user->id(), 'Active user acquired.');
+      $this->assertNull($acquired_user, 'No user acquired.');
+      $this->assertEquals($acquisition::FAIL_MULTIPLE_MATCHES, $acquisition->getFailCode(), 'Both active and inactive users found.');
     }
 
     // Test acquisition with active status provided.
@@ -185,13 +186,6 @@ class AcquisitionApiTest extends KernelTestBase {
     else {
       $this->assertEquals($inactive_user->id(), $acquired_user->id(), 'Active user acquired.');
     }
-
-    // Test acquisition with NULL status provided.
-    $values['status'] = NULL;
-    $acquired_user = $acquisition->acquire($values, $context, $method);
-
-    $this->assertNull($acquired_user, 'No user acquired.');
-    $this->assertEquals($acquisition::FAIL_MULTIPLE_MATCHES, $acquisition->getFailCode(), 'Both active and inactive users found.');
   }
 
   /**

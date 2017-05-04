@@ -91,57 +91,6 @@ class UserEntityTest extends KernelTestBase {
   }
 
   /**
-   * Tests username constraints for decoupled users.
-   */
-  public function testUserNameValidationDecoupled() {
-    // Test username empty validation.
-    // Expected: no errors.
-    $user_1 = $this->createUnsavedUser(self::UNSAVED_USER_DECOUPLED);
-    $messages = $this->getUserValidation($user_1);
-    $this->assertEmpty($messages, 'No violation errors.');
-
-    // Test username nonempty validation.
-    // Expected: validation errors.
-    $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
-    $user_2->decouple();
-    $username = $user_2->email_prefix;
-    $user_2->setUsername($username);
-    $messages = $this->getUserValidation($user_2);
-    $this->assertNotEmpty($messages, 'Some violation errors.');
-    $this->assertTrue(in_array('Decoupled users cannot have a username.', $messages));
-  }
-
-  /**
-   * Tests username constraints for coupled users.
-   */
-  public function testUserNameValidationCoupled() {
-    // Test username empty validation.
-    // Expected: no errors.
-    $user_1 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
-    $user_1->setUsername(NULL);
-    $messages = $this->getUserValidation($user_1);
-    $this->assertNotEmpty($messages, 'No violation errors.');
-    $this->assertTrue(in_array('You must enter a username.', $messages));
-
-    // Test username nonempty validation.
-    // Expected: validation errors.
-    $user_2 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED);
-    $username = $user_2->email_prefix;
-    $messages = $this->getUserValidation($user_2);
-    $this->assertEmpty($messages, 'No violation errors.');
-
-    // Save user for unique constraint in next test.
-    $user_2->save();
-
-    // Test username non unique validation.
-    // Expected: validation errors.
-    $user_3 = $this->createUnsavedUser(self::UNSAVED_USER_COUPLED, $username);
-    $messages = $this->getUserValidation($user_3);
-    $this->assertNotEmpty($messages, 'No violation errors.');
-    $this->assertTrue(in_array('The username %value is already taken.', $messages));
-  }
-
-  /**
    * Tests email constraints for decoupled users.
    */
   public function testUserEmailValidationDecoupled() {
